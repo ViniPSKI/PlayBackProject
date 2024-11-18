@@ -20,9 +20,9 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
     Realizar fork do repositório.
     Clonar o repositório:
-        git clone https://github.com/SeuUsuarioDoGit/squad-maker-web
+        git clone https://github.com/ViniPSKI/PlayBackProject
     Rodar o seguinte comando para adicionar a upstream:
-        git remote add upstream https://github.com/SquadMaker/squad-maker-web
+        git remote add upstream https://github.com/ViniPSKI/PlayBackProject
     Bloquear push para upstream:
         git remote set-url --push upstream NO_PUSH
     Atualizar repositório:
