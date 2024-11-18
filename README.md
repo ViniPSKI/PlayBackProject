@@ -16,7 +16,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
     npx expo start
    ```
 
-#Configurando ambiente de desenvolvimento
+## Configurando ambiente de desenvolvimento
 
     Realizar fork do repositório.
     Clonar o repositório:
