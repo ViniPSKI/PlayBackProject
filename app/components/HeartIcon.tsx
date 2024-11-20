@@ -1,24 +1,21 @@
-// HeartIcon.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface HeartIconProps {
-  // Para definir se o álbum está favoritado ou não
   isFavorited: boolean;
-  // Função de callback para mudar o estado de favoritado
   onToggleFavorite: () => void;
+  size?: number;
 }
 
-const HeartIcon: React.FC<HeartIconProps> = ({ isFavorited, onToggleFavorite }) => {
+export default function HeartIcon({ isFavorited, size, onToggleFavorite }:HeartIconProps) {
   return (
     <Icon
-      name={isFavorited ? 'heart' : 'heart-outline'} // Se for favoritado, usa o coração cheio, senão o outline
-      size={20}
-      color={isFavorited ? 'red' : 'gray'} // Cor vermelha se favoritado, caso contrário cinza
-      onPress={onToggleFavorite} // Altera o estado ao clicar
+      name={isFavorited ? 'heart' : 'heart-outline'}
+      size={size ? size : 20}
+      color={isFavorited ? 'red' : 'gray'}
+      onPress={onToggleFavorite}
       style={{ marginRight: 10 }}
     />
   );
 };
 
-export default HeartIcon;

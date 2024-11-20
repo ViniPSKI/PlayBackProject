@@ -16,14 +16,14 @@ export default function CreateAccount() {
           <Text className="text-sm font-semibold mb-1">Nome</Text>
           <Input
             placeholder="Luana"
-            classname="py-1 px-3 rounded-lg w-full h-10"
+            classname="py-1 px-3 rounded-lg w-full h-10 border"
           />
         </View>
         <View className="w-[55%]">
           <Text className="text-sm font-semibold mb-1">Sobrenome</Text>
           <Input
             placeholder="Do Rei"
-            classname="py-1 px-3 rounded-lg w-full h-10"
+            classname="py-1 px-3 rounded-lg w-full h-10 border"
           />
         </View>
       </View>
@@ -31,14 +31,14 @@ export default function CreateAccount() {
         <Text className="text-sm font-semibold mb-1">Email</Text>
         <Input
           placeholder="luanadorei@email.com"
-          classname=" py-1 px-3 rounded-lg"
+          classname=" py-1 px-3 rounded-lg border"
         />
       </View>
       <View className="w-[80%]">
         <Text className="text-sm font-semibold mb-1">Senha</Text>
         <Input
           placeholder="---------"
-          classname="py-1 px-3 rounded-lg"
+          classname="py-1 px-3 rounded-lg border"
           password={true}
         />
       </View>

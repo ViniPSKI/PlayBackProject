@@ -2,16 +2,33 @@ import { Image, ScrollView, Text, View } from "react-native";
 import Input from "../components/Input";
 import { albuns, albunsNovos } from "../moks/albums";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import HeartIcon from "../components/HeartIcon";
+import { useState } from "react";
+import Avatar from "../components/Avatar";
+import { router } from "expo-router";
+import Button from "../components/Button";
+import UsePeriodOfDay from "../hooks/usePeriodOfDay";
+import StarRating from "../components/StarRating";
 
 export default function InitialScreen(){
     const userLogado = "Eduarda";
     const albun: Album[] = albuns;
     const albunsNew: Album[] = albunsNovos;
 
+    const messageWelcome = UsePeriodOfDay();
+
+    const [isFavorited, setIsFavorited] = useState(false);
+    const toggleFavorite = () => {
+        setIsFavorited(prev => !prev);
+    };
+
     return(
         <ScrollView >
             <View className="flex gap-3 m-4 mt-10">
-            <Text>Boa noite, {userLogado}</Text>
+            <View className="flex flex-row justify-between">
+                <Text className="text-2xl">{messageWelcome}, {userLogado}!</Text>
+                <Button className="bg-blue rounded-full w-max p-2" iconColor="white" icon="bell-outline" />
+            </View>
             <Input placeholder="O que você está ouvindo?" classname="bg-light-gray w-full p-1 border-light-gray"></Input>
             <View className="bg-light-gray rounded-lg p-3 gap-2">
                 <View className="flex flex-row gap-4">
@@ -23,13 +40,13 @@ export default function InitialScreen(){
                 </View>
                 <Text className="font-extralight text-center text-xs">{albunsNew[0].descricao}</Text>
             </View>
-            <View className="flex flex-row">
+            <View className="flex flex-row justify-between">
                 <Text>Em alta</Text>
                 <Text className="text-xs font-extralight justify-end">Ver todos</Text>
             </View>
             <View className="bg-light-gray rounded-lg p-3 flex flex-row justify-around">
                 {albun.map((a, key)=>(
-                    <View key={key} className="max-w-[25%] flex items-center justify-center">
+                    <View onTouchEnd={()=> router.push("/(tabs)/album")} key={key} className="max-w-[25%] flex items-center justify-center">
                         <Image width={40} height={40} source={{uri:a.imgLink}} className="rounded-md" />
                         <Text className="overflow-hidden whitespace-nowrap w-[95%] text-center" numberOfLines={1}>{a.nome}</Text>
                         <Text className="font-extralight text-xs">{a.autor}</Text>
@@ -51,20 +68,20 @@ export default function InitialScreen(){
                     NOSTALGIA RENOVADAAAAAAA
                 </Text>
                 <View>
-                    <Text>Estrelas</Text>
+                    <StarRating />
                 </View>
                 <Text className="font-extralight text-xs">
                     Taylor revive 1989 com vocais melhores e novas faixas, deixando tudo ainda mais icônico e moderno. TAYMOTHER!!
                 </Text>
                 <View className="flex flex-row justify-between">
                     <View className="flex flex-row gap-2">
-                        <Image width={15} height={15} source={{uri:"https://i.pinimg.com/236x/4c/20/2b/4c202b6376037a5fc660a6c7b6e55661.jpg"}} className="rounded-full" />
-                        <Text className="text-[9px]">Sabrina C.</Text>
+                        <Avatar size={20} urlImg="https://i.pinimg.com/236x/4c/20/2b/4c202b6376037a5fc660a6c7b6e55661.jpg" />
+                        <Text className="text-[12px]">Sabrina C.</Text>
                     </View>
                     <View className="flex flex-row gap-4 justify-end">
-                        <Icon name="heart-multiple"></Icon>
-                        <Icon name="comment-text-multiple-outline"></Icon>
-                        <Icon name="share-variant-outline"></Icon>
+                        <HeartIcon isFavorited={isFavorited} onToggleFavorite={toggleFavorite} size={20} />
+                        <Icon size={20} name="comment-text-multiple-outline"></Icon>
+                        <Icon size={20} name="share-variant-outline"></Icon>
                     </View>
                 </View>
             </View>

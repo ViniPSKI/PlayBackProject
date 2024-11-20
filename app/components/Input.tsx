@@ -8,10 +8,12 @@ interface InputProps{
     password?:boolean;
     classname?:string;
     icon?: string;
+    multiline?:boolean;
+    styleTextInput?:string;
 }
 
-function Input({icon, password, ...props}:InputProps){
-    const defaultstyle = "border border-gray rounded-xl flex flex-row items-center"
+function Input({icon, password, multiline, ...props}:InputProps){
+    const defaultstyle = "border-gray rounded-xl flex flex-row items-center"
     const [secure, setSecure] = useState(password);
     return(
             <View className={`${defaultstyle} ${props.classname}`}>
@@ -21,7 +23,7 @@ function Input({icon, password, ...props}:InputProps){
                     className="px-2"
                     />
                 )}
-                <TextInput secureTextEntry={secure} placeholder={props.placeholder}></TextInput>
+                <TextInput multiline={multiline} secureTextEntry={secure} placeholder={props.placeholder} className={props.styleTextInput}></TextInput>
                 {password && 
                     <Icon name={secure ? "eye" : 'eye-off-outline'}
                     size={20} color='gray' 
