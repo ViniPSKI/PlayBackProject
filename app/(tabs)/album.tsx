@@ -1,21 +1,23 @@
 import { Image, ScrollView, Text, View, TouchableOpacity } from "react-native";
-import { albuns, albunsNovos } from "../moks/albums";
+import { albunsNovos } from "../moks/albums";
 import { Tracklist } from "../moks/tracklist";
 import { Reviews } from "../moks/reviews";
+import { Usuarios } from "../moks/usuarios"
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from "../components/Header";
 import Button from "../components/Button"
 import React, { useState } from 'react';
-
+import StarRating from "../components/StarRating";
+import Avatar from "../components/Avatar";
+import HeartIcon from "../components/HeartIcon";
 
 export default function InitialScreen() {
   const userLogado = "Eduarda";
 
-  const albun = albuns;
-  const albunsNew = albunsNovos;
-  const album = albunsNew[0];  // pegando o primeiro pra testar. Depois passar o album pelo navigation
+  const album = albunsNovos[0];  // pegando o primeiro pra testar. Depois passar o album pelo navigation
   const tracklist = Tracklist;
   const reviews = Reviews;
+  const usuarios = Usuarios[0]; // pegar para cada idUsuario de cada Review
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -24,6 +26,7 @@ export default function InitialScreen() {
   };
 
   return (
+    <ScrollView>
     <View className="flex bg-white">
         <View className="flex gap-3 rounded-b-[50px] bg-extra-light-gray pb-10">
             <Header 
@@ -43,16 +46,16 @@ export default function InitialScreen() {
             
             <View className="flex-row justify-center items-center space-x-4 gap-3 mt-5">
                 <Button 
-                    textButton="Avaliar" classname="w-[42%] bg-blue" 
+                    textButton="Avaliar" classname="w-[42%] bg-blue h-[40px]" 
                     icon="star" iconSize={25} iconColor="white"
-                    textStyle="text-white  text-[20px]" 
+                    textStyle="text-white  text-lg" 
                 />
                 <Button  
-                    classname="w-[16%] bg-blue" 
+                    classname="w-[16%] bg-blue h-[40px]" 
                     icon="dots-horizontal" iconSize={25} iconColor="white"
                 />
                 <Button 
-                    classname="w-[16%] bg-blue" 
+                    classname="w-[16%] bg-blue h-[40px]" 
                     icon="forum-outline" iconSize={25} iconColor="white"
                 />
             </View>
@@ -100,12 +103,21 @@ export default function InitialScreen() {
         <View className="mx-16 mt-6">
             <Text className="font-bold text-[20px] pb-2">Reviews</Text>
             {reviews.map((a, key) => (
-                <View className="bg-extra-light-gray rounded-2xl px-7 pt-4 pb-4 gap-2 mb-10">
+                <View className="bg-extra-light-gray rounded-2xl pl-7 pr-4 pt-4 pb-4 gap-2 mb-10">
                     <Text className="text-[16px]">{a.titulo}</Text>
+                    <StarRating initialRating={a.estrelas} isDisabled={true}/>
                     <Text className="text-[15px] color-gray">{a.comentario}</Text>
+                    <View className="flex-row pl-1 pr-3 items-center mt-3">
+                        <Avatar urlImg={usuarios.imgPerfil} size={30}/>
+                        <Text className="text-[15px] ml-3 w-[69%]">{usuarios.nome}</Text>
+                        <HeartIcon isFavorited={true} size={22} onToggleFavorite={()=>0}/>
+                        <Icon name="message-reply-text-outline" size={22} color="gray"/>
+                        <Icon name="share-variant-outline" size={22} color="gray" className="ml-[12px]" />
+                    </View>
                 </View>
             ))}
         </View>
     </View>
+    </ScrollView>
   );
 }
