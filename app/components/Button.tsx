@@ -20,7 +20,7 @@ export default function Button({
   textStyle,
   ...props
 }: ButtonProps) {
-  const defaultStyle = 'items-center justify-center rounded-md flex-row p-3';
+  const defaultStyle = 'items-center justify-center rounded-md flex-row p-1';
 
   return (
     <TouchableOpacity className={`${defaultStyle} ${classname}`} {...props}>

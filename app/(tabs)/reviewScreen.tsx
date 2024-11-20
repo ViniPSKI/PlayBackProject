@@ -1,5 +1,4 @@
 import { Image, ScrollView, Text, View } from "react-native";
-import ButtonReview from "../components/ButtonReview";
 import { albuns, albunsNovos } from "../moks/albums";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Link, router } from 'expo-router';
@@ -7,6 +6,7 @@ import React, { useState } from 'react';
 import StarRating from '../components/StarRating';
 import HeartIcon from "../components/HeartIcon";
 import InputReview from "../components/InputReview";
+import Button from "../components/Button";
 
 export default function InitialScreen(){
     const userLogado = "Eduarda";
@@ -37,7 +37,7 @@ export default function InitialScreen(){
                 <View className="flex-row items-center w-full">
                     <Icon name="arrow-left" size={20} className="w-[20%]" />
                     <Text className="font-semibold text-2xl flex-1 text-center">{albunsNew[0].nome}</Text>
-                    <ButtonReview onPress={() => router.push('/initialScreen')} textButton="Publicar" classname="bg-blue w-[20%] h-8" textStyle="text-white "/> 
+                    <Button onPress={() => router.push('/initialScreen')} textButton="Publicar" classname="h-10 bg-blue" textStyle="text-white" />
                 </View>
                 
                 <View className="bg-light-gray rounded-lg p-3 gap-2 mt-8">
