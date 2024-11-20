@@ -26,7 +26,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
     Bloquear push para upstream:
         git remote set-url --push upstream NO_PUSH
     Atualizar repositório:
-        git pull upstream main
+        git pull upstream master
     Para enviar as alterações (Sempre deve ser enviado para sua origin):
         git push origin
     Sempre que for implementar uma nova funcionalidade no projeto, deve ser criado uma nova branch:
