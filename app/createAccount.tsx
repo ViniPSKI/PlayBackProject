@@ -1,34 +1,49 @@
 import { Image, Text, View } from "react-native";
 import Input from "./components/Input";
 import Button from "./components/Button";
+import { Link, router } from "expo-router";
 
 export default function CreateAccount() {
   return (
     <View className="flex-1 items-center gap-4 bg-white">
       <Image
-        className="py-4 mt-12"
+        className="py-4 mt-5"
         source={require("@/assets/images/loginImage.png")}
       />
-      <Text className="font-bold text-2xl mb-10">Cadastre-se</Text>
-      <View className="flex flex-row w-[80%]">
+      <Text className="font-bold text-2xl mb-5">Cadastre-se</Text>
+      <View className="w-[80%] flex flex-row items-center gap-4">
+        <View className="w-[40%]">
+          <Text className="text-sm font-semibold mb-1">Nome</Text>
+          <Input
+            placeholder="Luana"
+            classname="py-1 px-3 rounded-lg w-full h-10"
+          />
+        </View>
+        <View className="w-[55%]">
+          <Text className="text-sm font-semibold mb-1">Sobrenome</Text>
+          <Input
+            placeholder="Do Rei"
+            classname="py-1 px-3 rounded-lg w-full h-10"
+          />
+        </View>
+      </View>
+      <View className="w-[80%]">
+        <Text className="text-sm font-semibold mb-1">Email</Text>
         <Input
-          placeholder="Luana"
-          classname="py-1 px-3 rounded-lg w-[60%]"
-        />
-        <Input
-          placeholder="Do Rei"
-          classname="py-1 px-3 rounded-lg"
+          placeholder="luanadorei@email.com"
+          classname=" py-1 px-3 rounded-lg"
         />
       </View>
-      <Input
-        placeholder="luanadorei@email.com"
-        classname="w-[80%] py-1 px-3 rounded-lg"
-      />
-      <Input
-        placeholder="---------"
-        classname="w-[80%] py-1 px-3 rounded-lg"
-      />
-      <Button textButton="Cadastrar-se" classname="w-[80%] bg-blue" textStyle="text-white" />
+      <View className="w-[80%]">
+        <Text className="text-sm font-semibold mb-1">Senha</Text>
+        <Input
+          placeholder="---------"
+          classname="py-1 px-3 rounded-lg"
+          password={true}
+        />
+      </View>
+      <Button onPress={() => router.push("/(tabs)/initialScreen")} textButton="Cadastrar-se" classname="w-[80%] bg-blue" textStyle="text-white" />
+      <Text className="font-extralight text-xs text-center">Ao cadastrar-se, você concorda com nossos <Link href="/homeScreen">termos de serviços.</Link></Text>
     </View>
   );
 }

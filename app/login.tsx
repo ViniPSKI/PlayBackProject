@@ -12,7 +12,7 @@ export default function LoginScreen(){
                 <Text className="font-light">Digite suas credenciais para acessar</Text>
             </View>
             <Input placeholder="Email" classname="w-[90%] py-1 rounded-lg" icon="email-outline" />
-            <Input placeholder="Senha" classname="w-[90%] py-1 rounded-lg" icon="lock" />
+            <Input placeholder="Senha" classname="w-[90%] py-1 rounded-lg" icon="lock" password={true} />
             <Button onPress={()=> router.push('/initialScreen')} textButton="Logar" classname="w-[60%] h-12 bg-blue" textStyle="text-white" />
             <View className="flex flex-row gap-6">
                 <Button classname="w-16 bg-white border rounded-2xl" icon="facebook" />
