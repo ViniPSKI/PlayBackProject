@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import StarRating from '../components/StarRating';
 import HeartIcon from "../components/HeartIcon";
 import InputReview from "../components/InputReview";
+import BackButton from "../components/BackButton";
 
 export default function InitialScreen(){
     const userLogado = "Eduarda";
@@ -33,9 +34,11 @@ export default function InitialScreen(){
 
     return(
         <ScrollView >
-            <View className="flex gap-3 m-10">
+            <View className="flex gap-3 m-10 p-3">
                 <View className="flex-row items-center w-full">
-                    <Icon name="arrow-left" size={20} className="w-[20%]" />
+                    <BackButton
+                        iconSize={30} // Tamanho maior do ícone
+                    />
                     <Text className="font-semibold text-2xl flex-1 text-center">{albunsNew[0].nome}</Text>
                     <ButtonReview onPress={() => router.push('/initialScreen')} textButton="Publicar" classname="bg-blue w-[20%] h-8" textStyle="text-white "/> 
                 </View>
