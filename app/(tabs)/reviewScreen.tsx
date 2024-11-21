@@ -39,7 +39,7 @@ export default function InitialScreen(){
                         iconSize={30}
                     />
                     <Text className="font-semibold text-2xl flex-1 text-center">{albunsNew[0].nome}</Text>
-                    <Button onPress={() => router.push('/initialScreen')} textButton="Publicar" classname="h-10 bg-blue" textStyle="text-white" />
+                    <Button onPress={() => router.push('/initialScreen')} textButton="Publicar" classname="h-8 bg-blue w-[20%]" textStyle="text-white" />
                 </View>
                 
                 <View className="bg-light-gray rounded-lg p-3 gap-2 mt-8">
