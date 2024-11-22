@@ -32,7 +32,7 @@ export default function Button({
           style={{ marginRight: textButton ? 8 : 0 }} 
         />
       )}
-      {textButton && <Text className={`font-semibold text-base ${textStyle}`}>{textButton}</Text>}
+      {textButton && <Text className={`font-semibold ${textStyle}`}>{textButton}</Text>}
     </TouchableOpacity>
   );
 }
