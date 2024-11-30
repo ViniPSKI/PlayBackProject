@@ -68,7 +68,7 @@ export default function InitialScreen(){
                     NOSTALGIA RENOVADAAAAAAA
                 </Text>
                 <View>
-                    <StarRating />
+                    <StarRating isDisabled={true} initialRating={3} />
                 </View>
                 <Text className="font-extralight text-xs">
                     Taylor revive 1989 com vocais melhores e novas faixas, deixando tudo ainda mais icônico e moderno. TAYMOTHER!!

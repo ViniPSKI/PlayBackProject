@@ -1,13 +1,11 @@
-// StarRating.tsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-// Definindo o tipo para as props do componente
 interface StarRatingProps {
-  initialRating?: number; // Avaliação inicial (opcional)
-  onRatingChange?: (rating: number) => void; // Função de callback para quando a avaliação mudar
-  isDisabled?: boolean; // Nova prop para desativar a interação
+  initialRating?: number;
+  onRatingChange?: (rating: number) => void; 
+  isDisabled?: boolean; 
 }
 
 const StarRating: React.FC<StarRatingProps> = ({ 
@@ -15,15 +13,14 @@ const StarRating: React.FC<StarRatingProps> = ({
   onRatingChange, 
   isDisabled = false 
 }) => {
-  const [rating, setRating] = useState(initialRating); // Inicializa com o valor passado de 'initialRating'
+  const [rating, setRating] = useState(initialRating);
 
-  // Função para lidar com o clique na estrela
   const handlePress = (index: number) => {
-    if (isDisabled) return; // Se o componente estiver desativado, ignora a interação
-    const newRating = index + 1; // O índice começa em 0, mas queremos que a estrela 1 seja index 1
-    setRating(newRating); // Atualiza o estado com o novo valor
+    if (isDisabled) return; 
+    const newRating = index + 1;
+    setRating(newRating);
     if (onRatingChange) {
-      onRatingChange(newRating); // Chama a função de callback no componente pai
+      onRatingChange(newRating);
     }
   };
 

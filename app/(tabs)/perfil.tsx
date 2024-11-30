@@ -26,30 +26,30 @@ export default function InitialScreen() {
                 title={usuario.arroba} 
                 onBackPress={() => 0} //() => navigation.goBack()
             />
-            <View className="flex-row justify-center items-center mt-5">
-                <Avatar urlImg={usuario.imgPerfil} size={100}/>
+            <View className="flex-row gap-1 justify-center items-center mt-5">
+                <Avatar urlImg={usuario.imgPerfil} size={75}/>
                 <View className="ml-7 flex-col justify-center items-center w-[20%]">
                     <Text className="text-[20px] font-bold">{usuario.avaliacoes}</Text>
-                    <Text className="text-[18px]">avaliações</Text>
+                    <Text className="text-[14px]">avaliações</Text>
                 </View>
                 <View className="flex-col justify-center items-center w-[20%]">
                     <Text className="text-[20px] font-bold">{usuario.seguidores}</Text>
-                    <Text className="text-[18px]">seguidores</Text>
+                    <Text className="text-[14px]">seguidores</Text>
                 </View>
                 <View className="flex-col justify-center items-center w-[20%]">
                     <Text className="text-[20px] font-bold">{usuario.seguindo}</Text>
-                    <Text className="text-[18px]">seguindo</Text>
+                    <Text className="text-[14px]">seguindo</Text>
                 </View>
             </View>
 
             <View className="mx-[62px] mt-2">
-                <Text className="text-[25px]">{usuario.nome}</Text>
-                <Text className="mt-1 text-[20px] color-gray">{usuario.recado}</Text>
+                <Text className="text-[20px]">{usuario.nome}</Text>
+                <Text className="mt-1 text-[14px] color-gray">{usuario.recado}</Text>
             </View>
             
             <View className="flex-row justify-center items-center space-x-4 gap-3 mt-5 mb-5">
                 <Button 
-                    textButton="Editar perfil" classname="w-[65%] bg-blue h-[40px] mr-3" 
+                    textButton="Editar perfil" classname="w-[65%] bg-blue p-2 mr-3" 
                     textStyle="text-white text-[20px]" 
                 />
                 <Button  
@@ -73,11 +73,11 @@ export default function InitialScreen() {
             </View>
         </View>
       
-        <View className="mx-16 mt-6">
-            <Text className="font-bold text-[21px] mb-1">Últimas Reviews</Text>
+        <View className="mx-10 mt-6">
+            <Text className="font-bold text-[20px] mb-1">Últimas Reviews</Text>
             {reviews.map((a, key) => (
                 <View className="gap-2 mb-10 rounded-lg">
-                    <View className="bg-extra-light-gray py-2 flex-row pl-6 rounded-lg items-center">
+                    <View className="bg-extra-light-gray py-2 flex-row  rounded-lg items-center">
                         <Image 
                             width={70} 
                             height={75} 
@@ -88,7 +88,7 @@ export default function InitialScreen() {
                             <Text className="text-[15px]">{album.nome}</Text>
                             <Text className="text-[15px] color-gray">{album.autor} · Álbum</Text>
                         </View>
-                        <Icon name="play-circle" size={35} color="gray" className="mr-2 w-[10%]" />
+                        <Icon name="play-circle" size={35} color="gray" className="" />
                     </View>
                     <Text className="text-[15px]">{a.titulo}</Text>
                     <View className="flex-row">

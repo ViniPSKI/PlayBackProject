@@ -10,14 +10,15 @@ import React, { useState } from 'react';
 import StarRating from "../components/StarRating";
 import Avatar from "../components/Avatar";
 import HeartIcon from "../components/HeartIcon";
+import { router } from "expo-router";
 
 export default function InitialScreen() {
   const userLogado = "Eduarda";
 
-  const album = albunsNovos[0];  // pegando o primeiro pra testar. Depois passar o album pelo navigation
+  const album = albunsNovos[0];
   const tracklist = Tracklist;
   const reviews = Reviews;
-  const usuarios = Usuarios[0]; // pegar para cada idUsuario de cada Review
+  const usuarios = Usuarios[0];
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -31,7 +32,7 @@ export default function InitialScreen() {
         <View className="flex gap-3 rounded-b-[50px] bg-extra-light-gray pb-10">
             <Header 
                 title={album.nome} 
-                onBackPress={() => 0} //() => navigation.goBack()
+                onBackPress={() => 0}
             />
             <View style={{alignItems: 'center'}} className="flex gap-3">
                 <Image 
@@ -49,6 +50,7 @@ export default function InitialScreen() {
                     textButton="Avaliar" classname="w-[42%] bg-blue h-[40px]" 
                     icon="star" iconSize={25} iconColor="white"
                     textStyle="text-white  text-lg" 
+                    onPress={()=> router.navigate("/(tabs)/reviewScreen")}
                 />
                 <Button  
                     classname="w-[16%] bg-blue h-[40px]" 
