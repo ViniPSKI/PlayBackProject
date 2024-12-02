@@ -5,12 +5,9 @@ import React, { useState } from 'react';
 import StarRating from '../components/StarRating';
 import HeartIcon from "../components/HeartIcon";
 import Button from "../components/Button";
-import BackButton from "../components/BackButton";
 import Input from "../components/Input";
 
 export default function InitialScreen(){
-    const userLogado = "Eduarda";
-    const albun: Album[] = albuns;
     const albunsNew: Album[] = albunsNovos;
 
     const [rating, setRating] = useState(0);
@@ -34,12 +31,15 @@ export default function InitialScreen(){
     return(
         <ScrollView >
             <View className="flex gap-3 m-10 p-3">
-                <View className="flex-row items-center w-full">
-                    <BackButton
+                <View className="flex-row items-center w-full justify-between">
+                    <Button
+                        icon="chevron-left"
                         iconSize={30}
+                        iconColor="gray"
+                        onPress={() => router.back()}
                     />
                     <Text className="font-semibold text-2xl flex-1 text-center">{albunsNew[0].nome}</Text>
-                    <Button onPress={() => router.push('/initialScreen')} textButton="Publicar" classname="h-8 bg-blue w-[20%]" textStyle="text-white" />
+                    <Button onPress={() => router.push('/initialScreen')} textButton="Publicar" classname="h-8 bg-blue w-[25%]" textStyle="text-white" />
                 </View>
                 
                 <View className="bg-light-gray rounded-lg p-3 gap-2 mt-8">
