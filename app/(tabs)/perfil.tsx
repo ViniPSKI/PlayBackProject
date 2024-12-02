@@ -77,7 +77,7 @@ export default function InitialScreen() {
             <Text className="font-bold text-[20px] mb-1">Últimas Reviews</Text>
             {reviews.map((a, key) => (
                 <View className="gap-2 mb-10 rounded-lg">
-                    <View className="bg-extra-light-gray py-2 flex-row  rounded-lg items-center">
+                    <View className="bg-extra-light-gray p-3 flex-row justify-around rounded-lg items-center">
                         <Image 
                             width={70} 
                             height={75} 
@@ -88,7 +88,7 @@ export default function InitialScreen() {
                             <Text className="text-[15px]">{album.nome}</Text>
                             <Text className="text-[15px] color-gray">{album.autor} · Álbum</Text>
                         </View>
-                        <Icon name="play-circle" size={35} color="gray" className="" />
+                        <Icon name="play-circle" size={30} color="gray" className="" />
                     </View>
                     <Text className="text-[15px]">{a.titulo}</Text>
                     <View className="flex-row">
