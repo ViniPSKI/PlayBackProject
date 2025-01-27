@@ -1,52 +1,40 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 
 interface SearchCardsProps {
-  image: string;
-  color: string;
-  text: string;
-  onPress?: () => void;
+    image: string;
+    text: string; 
+    color: string;
+    onPress?: () => void; 
 }
 
-export default function SearchCards ({ image, color, text, onPress } : SearchCardsProps) {
-  return (
-    <TouchableOpacity onPress={onPress} style={[styles.card, { backgroundColor: color }]}>
-      <View className='' >
-        <Text style={styles.text}>{text}</Text>
-        <Image source={{ uri: image }} style={styles.image} />
-      </View>
-    </TouchableOpacity>
-  );
+const SearchCards: React.FC<SearchCardsProps> = ({ image, text, color, onPress }) => {
+    return (
+        <TouchableOpacity 
+            onPress={onPress} 
+            style={{
+                backgroundColor: color || "#f0f0f0",
+                borderRadius: 10,
+                padding: 10,
+                marginBottom: 10,
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            <Image 
+                source={{ uri: image }} 
+                style={{
+                    width: 70,
+                    height: 70,
+                    borderRadius: 10,
+                    marginBottom: 5,
+                }} 
+            />
+            <Text style={{ fontSize: 14, fontWeight: "bold", textAlign: "center" }}>
+                {text}
+            </Text>
+        </TouchableOpacity>
+    );
 };
 
-const styles = StyleSheet.create({
-    card: {
-        width: '47%',
-        height: 100,
-        marginBottom: 15,
-        borderRadius: 10,
-        padding: 10,
-        overflow: 'hidden',
-        position: 'relative',
-      },
-      image: {
-        position: 'absolute',
-        width: 80,
-        height: 80,
-        borderRadius: 8, 
-        zIndex: 0,
-        left: 90,
-      },
-      text: {
-        width: '60%',
-        position: 'absolute',
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#fff',
-        textAlign: 'left',
-        zIndex: 1,
-        top: 25,
-        left: 5
-      },
-});
-
+export default SearchCards;

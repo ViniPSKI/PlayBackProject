@@ -13,7 +13,7 @@ import { router } from "expo-router";
 
 export default function InitialScreen() {
 
-  const albun: Album[] = albuns; // albuns marcados como favorito
+  const albun: Album_Teste[] = albuns; // albuns marcados como favorito
   const album = albunsNovos[0];  // precisa do album de cada review
   const reviews = Reviews; // reviews com o mesmo idusuario do perfil
   const usuario = Usuarios[1]; // pegar para cada idUsuario de cada Review
@@ -64,7 +64,7 @@ export default function InitialScreen() {
             <Text className="font-bold text-[21px]">Meus <HeartIcon isFavorited={true} size={22} onToggleFavorite={()=>0}/> Favoritos</Text>
             <View className="bg-extra-light-gray rounded-3xl pt-7 pb-5 flex flex-row justify-around px-10">
                 {albun.map((a, key)=>(
-                    <View onTouchEnd={()=> router.push("/(tabs)/album")} key={key} className="w-[23%] items-center justify-center">
+                    <View onTouchEnd={()=> router.push("/components/album")} key={key} className="w-[23%] items-center justify-center">
                         <Image width={90} height={95} source={{uri:a.imgLink}} className="rounded-lg" />
                         <Text className="overflow-hidden whitespace-nowrap w-[95%] text-center text-[17px]" numberOfLines={1}>{a.nome}</Text>
                         <Text className="font-extralight text-[13px]">{a.autor}</Text>
