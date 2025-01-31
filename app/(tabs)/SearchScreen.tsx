@@ -3,7 +3,7 @@ import { Topicos } from "../moks/topicosPesquisa";
 import SearchCards from "../components/SearchCards";
 import Input from "../components/Input";
 
-export default function InitialScreen(){
+export default function SearchScreen(){
     const topicos = Topicos;
 
     const EmAlta = topicos.slice(0, 2);

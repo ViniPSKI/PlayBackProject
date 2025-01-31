@@ -32,7 +32,7 @@ export default function InitialScreen() {
             <View className="flex gap-3 rounded-b-[50px] bg-extra-light-gray pb-10">
                 <Header 
                     title={album.nome} 
-                    onBackPress={() => 0}
+                    onBackPress={() => router.push("/(tabs)/initialScreen")}
                 />
                 <View style={{alignItems: 'center'}} className="flex gap-3">
                     <Image 
@@ -50,7 +50,7 @@ export default function InitialScreen() {
                         textButton="Avaliar" classname="w-[42%] bg-blue h-[40px]" 
                         icon="star" iconSize={25} iconColor="white"
                         textStyle="text-white  text-lg" 
-                        onPress={()=> router.navigate("/(tabs)/reviewScreen")}
+                        onPress={()=> router.navigate("/components/reviewScreen")}
                     />
                     <Button  
                         classname="w-[16%] bg-blue h-[40px]" 

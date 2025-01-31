@@ -19,8 +19,8 @@ export default function TabLayout() {
             backgroundColor: '#F3F3F3',
             borderRadius: 20,
             marginHorizontal: 90, 
-            marginBottom: 30,
-            height: 70,
+            marginBottom: 10,
+            height: 40,
             elevation: 0, 
             shadowColor: 'transparent',
           }
@@ -31,7 +31,7 @@ export default function TabLayout() {
             title: '',
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              <Icon name="home-outline" size={40} color={focused ? "#FFFFFF" : color} style={{
+              <Icon name="home-outline" size={15} color={focused ? "#FFFFFF" : color} style={{
                 backgroundColor: focused ? 'gray' : 'transparent',
                 borderRadius: 15, 
                 padding: 10,
@@ -46,7 +46,7 @@ export default function TabLayout() {
             title: '',
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              <Icon name="magnify" size={40} color={focused ? "#FFFFFF" : color} style={{
+              <Icon name="magnify" size={15} color={focused ? "#FFFFFF" : color} style={{
                 backgroundColor: focused ? 'gray' : 'transparent',
                 borderRadius: 15, 
                 padding: 10,
@@ -61,7 +61,7 @@ export default function TabLayout() {
             title: '',
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              <Icon name="account-outline" size={40} color={focused ? "#FFFFFF" : color} style={{
+              <Icon name="account-outline" size={15} color={focused ? "#FFFFFF" : color} style={{
                 backgroundColor: focused ? 'gray' : 'transparent',
                 borderRadius: 15, 
                 padding: 10,

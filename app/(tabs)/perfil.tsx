@@ -10,8 +10,11 @@ import StarRating from "../components/StarRating";
 import Avatar from "../components/Avatar";
 import HeartIcon from "../components/HeartIcon";
 import { router } from "expo-router";
+import { useAuth } from "../contexts/auth/AuthProvider";
 
-export default function InitialScreen() {
+export default function Perfil() {
+
+    const { userData } = useAuth();
 
   const albun: Album[] = albuns; // albuns marcados como favorito
   const album = albunsNovos[0];  // precisa do album de cada review
@@ -43,7 +46,7 @@ export default function InitialScreen() {
             </View>
 
             <View className="mx-[62px] mt-2">
-                <Text className="text-[20px]">{usuario.nome}</Text>
+                <Text className="text-[20px]">{userData?.nome}</Text>
                 <Text className="mt-1 text-[14px] color-gray">{usuario.recado}</Text>
             </View>
             
@@ -64,7 +67,7 @@ export default function InitialScreen() {
             <Text className="font-bold text-[21px]">Meus <HeartIcon isFavorited={true} size={22} onToggleFavorite={()=>0}/> Favoritos</Text>
             <View className="bg-extra-light-gray rounded-3xl pt-7 pb-5 flex flex-row justify-around px-10">
                 {albun.map((a, key)=>(
-                    <View onTouchEnd={()=> router.push("/(tabs)/album")} key={key} className="w-[23%] items-center justify-center">
+                    <View onTouchEnd={()=> router.push("/components/album")} key={key} className="w-[23%] items-center justify-center">
                         <Image width={90} height={95} source={{uri:a.imgLink}} className="rounded-lg" />
                         <Text className="overflow-hidden whitespace-nowrap w-[95%] text-center text-[17px]" numberOfLines={1}>{a.nome}</Text>
                         <Text className="font-extralight text-[13px]">{a.autor}</Text>

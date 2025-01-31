@@ -1,9 +1,35 @@
 import { Image, Text, View } from "react-native";
 import Input from "./components/Input";
 import Button from "./components/Button";
-import { Link, router } from "expo-router";
+import { Link, router, useRouter } from "expo-router";
+import { useState } from "react";
+import { signUp } from './services/firebaseService';
 
 export default function CreateAccount() {
+
+  const [nome, setNome] = useState('');
+  const [sobrenome, setSobrenome] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const router = useRouter();
+
+  async function createUser() {
+    if (!email || !senha || !nome || !sobrenome ) {
+      console.log('Erro', 'Todos os campos são obrigatórios!');
+      return;
+    }
+
+    const { user, error } = await signUp({nome:nome, sobrenome:sobrenome, email:email, password:senha});
+
+    if (error) {
+      console.log('Erro', error);
+      return;
+    }
+
+    console.log('Sucesso', 'Usuário cadastrado com sucesso!');
+    router.push('/(tabs)/initialScreen');
+  }
+
   return (
     <View className="flex-1 items-center gap-4 bg-white">
       <Image
@@ -17,6 +43,7 @@ export default function CreateAccount() {
           <Input
             placeholder="Luana"
             classname="py-1 px-3 rounded-lg w-full h-10 border"
+            onChangeText={setNome}
           />
         </View>
         <View className="w-[55%]">
@@ -24,6 +51,7 @@ export default function CreateAccount() {
           <Input
             placeholder="Do Rei"
             classname="py-1 px-3 rounded-lg w-full h-10 border"
+            onChangeText={setSobrenome}          
           />
         </View>
       </View>
@@ -32,6 +60,7 @@ export default function CreateAccount() {
         <Input
           placeholder="luanadorei@email.com"
           classname=" py-1 px-3 rounded-lg border"
+          onChangeText={setEmail}
         />
       </View>
       <View className="w-[80%]">
@@ -40,9 +69,10 @@ export default function CreateAccount() {
           placeholder="---------"
           classname="py-1 px-3 rounded-lg border"
           password={true}
+          onChangeText={setSenha}
         />
       </View>
-      <Button onPress={() => router.push("/(tabs)/initialScreen")} textButton="Cadastrar-se" classname="w-[80%] bg-blue" textStyle="text-white" />
+      <Button onPress={createUser} textButton="Cadastrar-se" classname="w-[80%] bg-blue" textStyle="text-white" />
       <Text className="font-extralight text-xs text-center">Ao cadastrar-se, você concorda com nossos <Link href="/homeScreen">termos de serviços.</Link></Text>
     </View>
   );

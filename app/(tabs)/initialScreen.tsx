@@ -9,13 +9,14 @@ import { router } from "expo-router";
 import Button from "../components/Button";
 import UsePeriodOfDay from "../hooks/usePeriodOfDay";
 import StarRating from "../components/StarRating";
+import { useAuth } from "../contexts/auth/AuthProvider";
 
 export default function InitialScreen(){
-    const userLogado = "Eduarda";
     const albun: Album[] = albuns;
     const albunsNew: Album[] = albunsNovos;
 
     const messageWelcome = UsePeriodOfDay();
+    const { firebaseUser, userData, loading } = useAuth();
 
     const [isFavorited, setIsFavorited] = useState(false);
     const toggleFavorite = () => {
@@ -26,7 +27,7 @@ export default function InitialScreen(){
         <ScrollView >
             <View className="flex gap-3 m-4 mt-10">
             <View className="flex flex-row justify-between">
-                <Text className="text-2xl">{messageWelcome}, {userLogado}!</Text>
+                <Text className="text-2xl">{messageWelcome}, {userData?.nome}!</Text>
                 <Button className="bg-blue rounded-full w-max p-2" iconColor="white" icon="bell-outline" />
             </View>
             <Input placeholder="O que você está ouvindo?" classname="bg-light-gray w-full p-1 border-light-gray"></Input>
@@ -46,7 +47,7 @@ export default function InitialScreen(){
             </View>
             <View className="bg-light-gray rounded-lg p-3 flex flex-row justify-around">
                 {albun.map((a, key)=>(
-                    <View onTouchEnd={()=> router.push("/(tabs)/album")} key={key} className="max-w-[25%] flex items-center justify-center">
+                    <View onTouchEnd={()=> router.push("/components/album")} key={key} className="max-w-[25%] flex items-center justify-center">
                         <Image width={40} height={40} source={{uri:a.imgLink}} className="rounded-md" />
                         <Text className="overflow-hidden whitespace-nowrap w-[95%] text-center" numberOfLines={1}>{a.nome}</Text>
                         <Text className="font-extralight text-xs">{a.autor}</Text>
