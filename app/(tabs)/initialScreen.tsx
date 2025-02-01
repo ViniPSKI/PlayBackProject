@@ -12,8 +12,6 @@ import StarRating from "../components/StarRating";
 import { useAuth } from "../contexts/auth/AuthProvider";
 
 export default function InitialScreen(){
-    const albunsNew: Album_Teste[] = albunsNovos;
-
     const [albumsTrending, setAlbumsTrending] = useState<Album[]>([]);
 
     const fetchTrendingAlbums = async () => {
