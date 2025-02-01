@@ -70,6 +70,7 @@ export default function InitialScreen() {
                 <Header 
                     title={albumParm.title} 
                     onBackPress={() => 0}
+
                 />
                 <View style={{alignItems: 'center'}} className="flex gap-3">
                     <Image 

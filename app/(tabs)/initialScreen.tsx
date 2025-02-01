@@ -9,10 +9,9 @@ import { router } from "expo-router";
 import Button from "../components/Button";
 import UsePeriodOfDay from "../hooks/usePeriodOfDay";
 import StarRating from "../components/StarRating";
+import { useAuth } from "../contexts/auth/AuthProvider";
 
 export default function InitialScreen(){
-    const userLogado = "Eduarda";
-    //const albun: Album[] = albuns;
     const albunsNew: Album_Teste[] = albunsNovos;
 
     const [albumsTrending, setAlbumsTrending] = useState<Album[]>([]);
@@ -30,8 +29,11 @@ export default function InitialScreen(){
     useEffect(() => {
         fetchTrendingAlbums();
     }, []);
+    const albun: Album[] = albuns;
+    const albunsNew: Album[] = albunsNovos;
 
     const messageWelcome = UsePeriodOfDay();
+    const { firebaseUser, userData, loading } = useAuth();
 
     const [isFavorited, setIsFavorited] = useState(false);
     const toggleFavorite = () => {
@@ -42,7 +44,7 @@ export default function InitialScreen(){
         <ScrollView >
             <View className="flex gap-3 m-4 mt-10">
             <View className="flex flex-row justify-between">
-                <Text className="text-2xl">{messageWelcome}, {userLogado}!</Text>
+                <Text className="text-2xl">{messageWelcome}, {userData?.nome}!</Text>
                 <Button className="bg-blue rounded-full w-max p-2" iconColor="white" icon="bell-outline" />
             </View>
             <Input placeholder="O que você está ouvindo?" classname="bg-light-gray w-full p-1 border-light-gray"></Input>

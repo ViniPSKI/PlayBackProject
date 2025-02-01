@@ -1,9 +1,31 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Alert } from "react-native";
 import Button from "./components/Button";
 import Input from "./components/Input";
 import { Link, router } from 'expo-router';
+import { useState } from "react";
+import { singIn, getUser } from './services/firebaseService';
+import { useAuth } from "./contexts/auth/AuthProvider";
 
 export default function LoginScreen(){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { setUserData, userData } = useAuth();
+
+    async function login() {
+        const userId = await singIn(email, password) as string;
+        const user = await getUser(userId);
+        if(user){
+            setUserData({
+                uid: userId,
+                nome: user.nome,
+                sobrenome: user.sobrenome,
+                email: user.email,
+                password: user.password,
+            });
+            router.push('/initialScreen')
+        }
+    }
+
     return(
         <View className="flex-1 items-center gap-4 bg-white">
             <Image className="py-4 mt-12" source={require('@/assets/images/loginImage.png')} />
@@ -11,9 +33,9 @@ export default function LoginScreen(){
                 <Text className="font-bold text-2xl">Seja bem vindo!</Text>
                 <Text className="font-light">Digite suas credenciais para acessar</Text>
             </View>
-            <Input placeholder="Email" classname="w-[90%] py-1 rounded-lg border" icon="email-outline" />
-            <Input placeholder="Senha" classname="w-[90%] py-1 rounded-lg border" icon="lock" password={true} />
-            <Button onPress={()=> router.push('/initialScreen')} textButton="Logar" classname="w-[60%] h-12 bg-blue" textStyle="text-white" />
+            <Input placeholder="Email" classname="w-[90%] py-1 rounded-lg border" icon="email-outline" onChangeText={setEmail} />
+            <Input placeholder="Senha" classname="w-[90%] py-1 rounded-lg border" icon="lock" password={true} onChangeText={setPassword} />
+            <Button onPress={login} textButton="Logar" classname="w-[60%] h-12 bg-blue" textStyle="text-white" />
             <View className="flex flex-row gap-6">
                 <Button classname="w-16 bg-white border rounded-2xl" icon="facebook" />
                 <Button classname="w-16 bg-white border rounded-2xl" icon="google" />

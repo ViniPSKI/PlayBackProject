@@ -10,8 +10,11 @@ import StarRating from "../components/StarRating";
 import Avatar from "../components/Avatar";
 import HeartIcon from "../components/HeartIcon";
 import { router } from "expo-router";
+import { useAuth } from "../contexts/auth/AuthProvider";
 
-export default function InitialScreen() {
+export default function Perfil() {
+
+    const { userData } = useAuth();
 
   const albun: Album_Teste[] = albuns; // albuns marcados como favorito
   const album = albunsNovos[0];  // precisa do album de cada review
@@ -43,7 +46,7 @@ export default function InitialScreen() {
             </View>
 
             <View className="mx-[62px] mt-2">
-                <Text className="text-[20px]">{usuario.nome}</Text>
+                <Text className="text-[20px]">{userData?.nome}</Text>
                 <Text className="mt-1 text-[14px] color-gray">{usuario.recado}</Text>
             </View>
             

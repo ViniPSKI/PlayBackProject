@@ -6,10 +6,9 @@ import { useState } from "react";
 import SearchCardsAPI from "../components/SearchCardsAPI";
 import { router } from "expo-router";
 
-export default function InitialScreen(){
+export default function SearchScreen(){
     const [textoPesquisa, setTextoPesquisa] = useState("");
     const [retPesquisa, setRetPesquisa] = useState<Album[]>([]);
-    
     const topicos = Topicos;
 
     const EmAlta = topicos.slice(0, 2);
