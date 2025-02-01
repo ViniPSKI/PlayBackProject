@@ -1,8 +1,37 @@
 import { Image, Text, View } from "react-native";
 import Button from "./components/Button";
 import { Link, router } from 'expo-router';
+import  AsyncStorage  from "@react-native-async-storage/async-storage";
+import { useAuth } from "./contexts/auth/AuthProvider";
+import { useEffect, useState } from "react";
+import { singIn, getUser } from './services/firebaseService';
 
 export default function HomeScreen(){
+    const { setUserData, userData } = useAuth();
+    const [user, setUser] = useState('');
+
+    useEffect(()=>{
+        loadUserStorage();
+    },[]);
+
+    async function loadUserStorage() {
+        const value = await AsyncStorage.getItem('user')
+        if(value){
+            setUser(value);
+            const userStorage = await getUser(value);
+            if (userStorage){
+                await singIn(userStorage.email, userStorage.password);
+                setUserData({
+                    uid: value,
+                    nome: userStorage.nome,
+                    sobrenome: userStorage.sobrenome,
+                    email: userStorage.email,
+                    password: userStorage.password,
+                });
+                router.push('/initialScreen');
+            }
+        }
+    }
     return(
     <View
         className="flex-1 h-full"

@@ -2,14 +2,48 @@ import { View, Text, Image, Alert } from "react-native";
 import Button from "./components/Button";
 import Input from "./components/Input";
 import { Link, router } from 'expo-router';
-import { useState } from "react";
-import { singIn, getUser } from './services/firebaseService';
+import { useEffect, useState } from "react";
+import { singIn, getUser, signOut } from './services/firebaseService';
 import { useAuth } from "./contexts/auth/AuthProvider";
+import  AsyncStorage  from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [user, setUser] = useState('')
     const { setUserData, userData } = useAuth();
+
+    useEffect(()=>{
+        loadUserStorage();
+    },[]);
+
+    async function saveUserStorage(uid: string) {
+        setUser(uid);
+        await AsyncStorage.setItem('user', uid);
+    }
+
+    async function loadUserStorage() {
+        const value = await AsyncStorage.getItem('user')
+        if(value){
+            setUser(value);
+            const userStorage = await getUser(user);
+            await singIn(userStorage.email, userStorage.password);
+            setUserData({
+                uid: value,
+                nome: userStorage.nome,
+                sobrenome: userStorage.sobrenome,
+                email: userStorage.email,
+                password: userStorage.password,
+            });
+            router.push('/initialScreen');
+        }
+    }
+
+    async function clearUserStorage() {
+        await signOut();
+        AsyncStorage.clear();
+        setUser('');
+    }
 
     async function login() {
         const userId = await singIn(email, password) as string;
@@ -22,7 +56,8 @@ export default function LoginScreen(){
                 email: user.email,
                 password: user.password,
             });
-            router.push('/initialScreen')
+            await saveUserStorage(userId);
+            router.push('/initialScreen');
         }
     }
 
