@@ -16,7 +16,7 @@ export default function Perfil() {
 
     const { userData } = useAuth();
 
-  const albun: Album[] = albuns; // albuns marcados como favorito
+  const albun: Album_Teste[] = albuns; // albuns marcados como favorito
   const album = albunsNovos[0];  // precisa do album de cada review
   const reviews = Reviews; // reviews com o mesmo idusuario do perfil
   const usuario = Usuarios[1]; // pegar para cada idUsuario de cada Review
