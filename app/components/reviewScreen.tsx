@@ -8,7 +8,7 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 
 export default function InitialScreen(){
-    const albunsNew: Album[] = albunsNovos;
+    const albunsNew: Album_Teste[] = albunsNovos;
 
     const [rating, setRating] = useState(0);
     const handleRatingChange = (newRating: number) => {

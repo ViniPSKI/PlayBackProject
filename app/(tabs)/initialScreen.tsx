@@ -3,7 +3,7 @@ import Input from "../components/Input";
 import { albuns, albunsNovos } from "../moks/albums";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HeartIcon from "../components/HeartIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Avatar from "../components/Avatar";
 import { router } from "expo-router";
 import Button from "../components/Button";
@@ -12,6 +12,23 @@ import StarRating from "../components/StarRating";
 import { useAuth } from "../contexts/auth/AuthProvider";
 
 export default function InitialScreen(){
+    const albunsNew: Album_Teste[] = albunsNovos;
+
+    const [albumsTrending, setAlbumsTrending] = useState<Album[]>([]);
+
+    const fetchTrendingAlbums = async () => {
+        try {
+            const response = await fetch("https://api.deezer.com/chart/0/albums");
+            const data = await response.json();
+            setAlbumsTrending(data.data.slice(0, 3));
+        } catch (error) {
+            console.error("Erro ao buscar álbuns em alta:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchTrendingAlbums();
+    }, []);
     const albun: Album[] = albuns;
     const albunsNew: Album[] = albunsNovos;
 
@@ -46,11 +63,18 @@ export default function InitialScreen(){
                 <Text className="text-xs font-extralight justify-end">Ver todos</Text>
             </View>
             <View className="bg-light-gray rounded-lg p-3 flex flex-row justify-around">
-                {albun.map((a, key)=>(
-                    <View onTouchEnd={()=> router.push("/components/album")} key={key} className="max-w-[25%] flex items-center justify-center">
-                        <Image width={40} height={40} source={{uri:a.imgLink}} className="rounded-md" />
-                        <Text className="overflow-hidden whitespace-nowrap w-[95%] text-center" numberOfLines={1}>{a.nome}</Text>
-                        <Text className="font-extralight text-xs">{a.autor}</Text>
+                {albumsTrending.map((album) => (
+                    <View onTouchEnd={()=> router.push("/components/album")} key={album.id} className="max-w-[25%] flex items-center justify-center">
+                    <Image
+                        width={60}
+                        height={60}
+                        source={{ uri: album.cover_medium }}
+                        className="rounded-md"
+                    />
+                    <Text className="overflow-hidden whitespace-nowrap w-[95%] text-center" numberOfLines={1}>
+                        {album.title}
+                    </Text>
+                    <Text className="font-extralight text-xs">{album.artist.name}</Text>
                     </View>
                 ))}
             </View>

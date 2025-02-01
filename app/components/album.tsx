@@ -1,24 +1,55 @@
 import { Image, ScrollView, Text, View, TouchableOpacity } from "react-native";
 import { albunsNovos } from "../moks/albums";
-import { Tracklist } from "../moks/tracklist";
 import { Reviews } from "../moks/reviews";
 import { Usuarios } from "../moks/usuarios"
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from "../components/Header";
 import Button from "../components/Button"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StarRating from "../components/StarRating";
 import Avatar from "../components/Avatar";
 import HeartIcon from "../components/HeartIcon";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export default function InitialScreen() {
   const userLogado = "Eduarda";
 
   const album = albunsNovos[0];
-  const tracklist = Tracklist;
   const reviews = Reviews;
   const usuarios = Usuarios[0];
+
+  const { albumParametro } = useLocalSearchParams();
+
+  const albumParm = albumParametro ? JSON.parse(albumParametro as string) : null;
+
+  if (!albumParm) {
+    return <Text>Erro ao carregar o álbum!</Text>;
+  }
+
+  const [tracklist, setTracklist] = useState<TrackList[]>([]);
+
+  const buscaTrackList = async (link: string) => {
+    try {
+      const response = await fetch(link);
+      const data = await response.json();
+      return data.data || [];
+    } catch (e) {
+      console.error("Erro ao buscar tracklist:", e);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const carregarTracklist = async () => {
+      if (albumParm && albumParm.tracklist) {
+        const tracklistData = await buscaTrackList(albumParm.tracklist);
+        setTracklist(tracklistData); 
+      }
+    };
+
+    carregarTracklist();
+  }, []); 
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -26,23 +57,30 @@ export default function InitialScreen() {
     setIsExpanded(!isExpanded);
   };
 
+  function minutos(segundos: number): string {
+    const minutos = Math.floor(segundos / 60);
+    const segundosResto = segundos % 60;
+    return `${String(minutos).padStart(2, '0')}:${String(segundosResto).padStart(2, '0')}`;
+  }
+
   return (
     <ScrollView>
         <View className="flex bg-white">
             <View className="flex gap-3 rounded-b-[50px] bg-extra-light-gray pb-10">
                 <Header 
-                    title={album.nome} 
-                    onBackPress={() => router.push("/(tabs)/initialScreen")}
+                    title={albumParm.title} 
+                    onBackPress={() => 0}
+
                 />
                 <View style={{alignItems: 'center'}} className="flex gap-3">
                     <Image 
                         width={220} 
                         height={240} 
-                        source={{uri: album.imgLink}} 
+                        source={{uri: albumParm.cover_medium}} 
                         className="rounded-lg" 
                     />
-                    <Text className="text-[30px]">{album.nome}</Text>
-                    <Text className="text-[15px] color-gray">Álbum · {album.ano} · {album.qtdMusica} músicas</Text>
+                    <Text className="text-[30px] text-center">{albumParm.title}</Text>
+                    <Text className="text-[15px] color-gray">{albumParm.type} · {album.ano} · {tracklist.length} músicas</Text>
                 </View>
                 
                 <View className="flex-row justify-center items-center space-x-4 gap-3 mt-5">
@@ -50,7 +88,7 @@ export default function InitialScreen() {
                         textButton="Avaliar" classname="w-[42%] bg-blue h-[40px]" 
                         icon="star" iconSize={25} iconColor="white"
                         textStyle="text-white  text-lg" 
-                        onPress={()=> router.navigate("/components/reviewScreen")}
+                        onPress={()=> router.navigate("./reviewScreen")}
                     />
                     <Button  
                         classname="w-[16%] bg-blue h-[40px]" 
@@ -87,11 +125,14 @@ export default function InitialScreen() {
             <View className="mx-16 mt-6">
                 <Text className="font-bold text-[20px]">Tracklist</Text>
                 <View className="bg-extra-light-gray rounded-2xl px-7 pt-7 pb-3 gap-2">
-                    {tracklist.slice(0, isExpanded ? tracklist.length : 4).map((a, key) => (
+                    {tracklist.slice(0, isExpanded ? tracklist.length : 4).map((a:TrackList, key: number) => (
                         <View key={key} className="flex-row px-3 items-center">
                             <Text className="text-[16px] font-bold color-black mr-2 w-[5%]">{key + 1}</Text>
-                            <Text className="text-[16px] w-[80%]" numberOfLines={1}>{a.nome}</Text>
-                            <Text className="color-gray text-[14px] w-[10%]" numberOfLines={1}>{a.duracao}</Text>
+                            <View className="w-[80%] flex-row">
+                                <Text className="text-[16px] mr-1" numberOfLines={1}>{a.title}</Text>
+                                {a.explicit_lyrics ? (<MaterialIcons name="explicit" size={20} color="gray" />):(<></>)}
+                            </View>
+                            <Text className="color-gray text-[14px] w-[10%]" numberOfLines={1}>{minutos(a.duration)}</Text>
                             <Icon name="play-circle" size={17} color="gray" className="mr-2 w-[10%]" />
                         </View>
                     ))}
