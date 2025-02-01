@@ -1,4 +1,4 @@
-import { Image, Text, View } from "react-native";
+import { ActivityIndicator, Image, Text, View } from "react-native";
 import Button from "./components/Button";
 import { Link, router } from 'expo-router';
 import  AsyncStorage  from "@react-native-async-storage/async-storage";
@@ -8,7 +8,7 @@ import { singIn, getUser } from './services/firebaseService';
 
 export default function HomeScreen(){
     const { setUserData, userData } = useAuth();
-    const [user, setUser] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(()=>{
         loadUserStorage();
@@ -17,7 +17,7 @@ export default function HomeScreen(){
     async function loadUserStorage() {
         const value = await AsyncStorage.getItem('user')
         if(value){
-            setUser(value);
+            setIsLoading(true);
             const userStorage = await getUser(value);
             if (userStorage){
                 await singIn(userStorage.email, userStorage.password);
@@ -32,6 +32,16 @@ export default function HomeScreen(){
             }
         }
     }
+
+    if (isLoading) {
+        return (
+            <View className="flex-1 items-center justify-center bg-[#3048EA]">
+                <ActivityIndicator size="large" color="white" />
+                <Text className="text-white mt-4">Carregando...</Text>
+            </View>
+        );
+    }
+
     return(
     <View
         className="flex-1 h-full"
