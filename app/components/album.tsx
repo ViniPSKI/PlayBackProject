@@ -69,8 +69,7 @@ export default function InitialScreen() {
             <View className="flex gap-3 rounded-b-[50px] bg-extra-light-gray pb-10">
                 <Header 
                     title={albumParm.title} 
-                    onBackPress={() => 0}
-
+                    onBackPress={() => router.back()}
                 />
                 <View style={{alignItems: 'center'}} className="flex gap-3">
                     <Image 
@@ -88,7 +87,7 @@ export default function InitialScreen() {
                         textButton="Avaliar" classname="w-[42%] bg-blue h-[40px]" 
                         icon="star" iconSize={25} iconColor="white"
                         textStyle="text-white  text-lg" 
-                        onPress={()=> router.navigate("./reviewScreen")}
+                        onPress={() => router.push({ pathname: './reviewScreen', params: { album: JSON.stringify(albumParm) } })}
                     />
                     <Button  
                         classname="w-[16%] bg-blue h-[40px]" 
@@ -146,7 +145,7 @@ export default function InitialScreen() {
             <View className="mx-16 mt-6">
                 <Text className="font-bold text-[20px] pb-2">Reviews</Text>
                 {reviews.map((a, key) => (
-                    <View className="bg-extra-light-gray rounded-2xl p-4 gap-2 mb-10 w-[100%]">
+                    <View key={a.titulo} className="bg-extra-light-gray rounded-2xl p-4 gap-2 mb-10 w-[100%]">
                         <Text className="text-[16px]">{a.titulo}</Text>
                         <StarRating initialRating={a.estrelas} isDisabled={true}/>
                         <Text className="text-[15px] color-gray">{a.comentario}</Text>
