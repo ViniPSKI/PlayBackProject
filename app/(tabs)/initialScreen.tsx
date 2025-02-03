@@ -12,6 +12,8 @@ import StarRating from "../components/StarRating";
 import { useAuth } from "../contexts/auth/AuthProvider";
 
 export default function InitialScreen(){
+    const albunsNew: Album_Teste[] = albunsNovos;
+
     const [albumsTrending, setAlbumsTrending] = useState<Album[]>([]);
 
     const fetchTrendingAlbums = async () => {
@@ -27,8 +29,6 @@ export default function InitialScreen(){
     useEffect(() => {
         fetchTrendingAlbums();
     }, []);
-    const albun: Album[] = albuns;
-    const albunsNew: Album[] = albunsNovos;
 
     const messageWelcome = UsePeriodOfDay();
     const { firebaseUser, userData, loading } = useAuth();
