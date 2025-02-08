@@ -1,7 +1,8 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { ref, set, child, get } from 'firebase/database';
+import { ref, set, child, get, update } from 'firebase/database';
 import { auth, database} from '../../firebase';
 import { User } from '../interfaces/user';
+import  AsyncStorage  from "@react-native-async-storage/async-storage";
 
 export async function signUp (user: User) {
     try {
@@ -26,9 +27,10 @@ export async function singIn(email:string, password:string) {
 
 export async function signOut() {
   await auth.signOut();
+  AsyncStorage.removeItem("user")
 }
 
-export async function getUser(id: string) {
+export async function getUser(id?: string) {
   try{
     const dbRef = ref(database);
     const snapshot = await get(child(dbRef, `users/${id}`));
@@ -41,3 +43,12 @@ export async function getUser(id: string) {
     console.error('Erro ao recuperar usuário:', error.message);
   }
 }
+
+export async function updateUser(newData: Partial<User>,userId?: string) {
+  try {
+    await update(ref(database, `users/${userId}`), newData);
+    console.log("Usuário atualizado com sucesso!");
+  } catch (error) {
+    console.error("Erro ao atualizar usuário:", error);
+  }
+};

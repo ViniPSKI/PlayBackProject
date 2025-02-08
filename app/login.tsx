@@ -13,30 +13,9 @@ export default function LoginScreen(){
     const [user, setUser] = useState('')
     const { setUserData, userData } = useAuth();
 
-    useEffect(()=>{
-        loadUserStorage();
-    },[]);
-
     async function saveUserStorage(uid: string) {
         setUser(uid);
         await AsyncStorage.setItem('user', uid);
-    }
-
-    async function loadUserStorage() {
-        const value = await AsyncStorage.getItem('user')
-        if(value){
-            setUser(value);
-            const userStorage = await getUser(user);
-            await singIn(userStorage.email, userStorage.password);
-            setUserData({
-                uid: value,
-                nome: userStorage.nome,
-                sobrenome: userStorage.sobrenome,
-                email: userStorage.email,
-                password: userStorage.password,
-            });
-            router.push('/initialScreen');
-        }
     }
 
     async function clearUserStorage() {
@@ -55,6 +34,8 @@ export default function LoginScreen(){
                 sobrenome: user.sobrenome,
                 email: user.email,
                 password: user.password,
+                username: user.username,
+                bio: user.bio
             });
             await saveUserStorage(userId);
             router.push('/initialScreen');

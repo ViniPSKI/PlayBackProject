@@ -30,7 +30,7 @@ function Input({ icon, password, multiline, ...props }: InputProps) {
                 secureTextEntry={secure}
                 placeholder={props.placeholder}
                 className={props.styleTextInput}
-                value={props.value} 
+                defaultValue={props.value} 
                 onChangeText={props.onChangeText} 
             />
             {password && 
