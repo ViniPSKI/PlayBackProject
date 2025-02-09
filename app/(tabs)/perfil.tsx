@@ -12,7 +12,7 @@ import { useAuth } from "../contexts/auth/AuthProvider";
 import { getReviewsUsuario, getReviewsUsuarioIsFavorited } from "../services/reviewService";
 import { Review } from "../interfaces/review";
 import { getAlbumReview } from "../API/reviewAPI";
-import { ReviewComAlbum } from "../interfaces/reviewComAlbum";
+import { ReviewCompleta } from "../interfaces/reviewCompleta";
 import { signOut } from "firebase/auth";
 
 export default function Perfil() {
@@ -20,8 +20,8 @@ export default function Perfil() {
 
   const usuario = Usuarios[1]; // dados do usuario que ainda tem que buscar
 
-  const [reviews, setReviews] = useState<ReviewComAlbum[]>([]);
-  const [albumFavorited, setAlbumFavorited] = useState<ReviewComAlbum[]>([]);
+  const [reviews, setReviews] = useState<ReviewCompleta[]>([]);
+  const [albumFavorited, setAlbumFavorited] = useState<ReviewCompleta[]>([]);
 
   async function unloadUser(){
     await signOut;
@@ -147,7 +147,7 @@ export default function Perfil() {
                 <Image
                   width={70}
                   height={75}
-                  source={{ uri: review.albumData?.cover_medium || "fallback-image-url" }} // Fallback caso não tenha imagem
+                  source={{ uri: review.albumData?.cover_medium || "fallback-image-url" }}
                   className="rounded-lg"
                 />
                 <View className="ml-4 flex-col w-[69%]">
