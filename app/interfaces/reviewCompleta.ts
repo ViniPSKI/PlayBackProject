@@ -8,4 +8,8 @@ export interface ReviewComAlbum extends Review {
         name: string;
       };
     };
+    userData?: {
+      nome: string;
+      sobrenome: string;
+    };
 }

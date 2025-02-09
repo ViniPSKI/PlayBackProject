@@ -10,6 +10,11 @@ import Button from "../components/Button";
 import UsePeriodOfDay from "../hooks/usePeriodOfDay";
 import StarRating from "../components/StarRating";
 import { useAuth } from "../contexts/auth/AuthProvider";
+import { ReviewComAlbum } from "../interfaces/reviewCompleta";
+import { Review } from "../interfaces/review";
+import { getLastReviews } from "../services/reviewService";
+import { getAlbumReview } from "../API/reviewAPI";
+import { getUser } from "../services/firebaseService";
 
 export default function InitialScreen(){
     const albunsNew: Album_Teste[] = albunsNovos;
@@ -37,6 +42,36 @@ export default function InitialScreen(){
     const toggleFavorite = () => {
         setIsFavorited(prev => !prev);
     };
+
+    const [reviews, setReviews] = useState<ReviewComAlbum[]>([]);
+
+    const loadReviews = async () => {
+        if (userData?.uid) {
+            try {
+            const reviews: Review[] = await getLastReviews();
+            const reviewPromises = reviews.map(async (review) => {
+                const albumData = await getAlbumReview(review.albumId);
+                const userData = await getUser(review.idUsuario);
+                return { ...review, albumData, userData };
+            });
+            const reviewsComAlbums = await Promise.all(reviewPromises);
+
+            const sortedReviews = reviewsComAlbums.sort((a, b) => {
+                const dateA = new Date(a.createdAt); 
+                const dateB = new Date(b.createdAt);
+                return dateB.getTime() - dateA.getTime();
+            });
+
+            setReviews(sortedReviews);
+            } catch (error) {
+            console.error("Erro ao carregar reviews:", error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        loadReviews();
+    }, []);
 
     return(
         <ScrollView >
@@ -77,37 +112,39 @@ export default function InitialScreen(){
                 ))}
             </View>
             <Text>Timeline</Text>
-            <View className="bg-light-gray rounded-md p-2 gap-1">
-                <View className="bg-snow p-2 rounded-md">
-                    <View className="flex flex-row gap-4">
-                        <Image width={40} height={40} source={{uri:albunsNew[0].imgLink}} className="rounded-md" />
-                        <View>
-                            <Text className="">{albunsNew[0].nome}</Text>
-                            <Text className="text-xs font-extralight">{albunsNew[0].autor}</Text>
+            {reviews.map((review, key) => (
+                <View key={key} className="bg-light-gray rounded-md p-2 gap-1">
+                    <View className="bg-snow p-2 rounded-md">
+                        <View className="flex flex-row gap-4">
+                            <Image width={40} height={40} source={{ uri: review.albumData?.cover_medium || "fallback-image-url" }} className="rounded-md" />
+                            <View>
+                                <Text className="">{review.albumData?.title || "Título do Álbum"}</Text>
+                                <Text className="text-xs font-extralight">{review.albumData?.artist.name || "Artista"}</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <Text className="font-light text-sm">
+                        {review.title}
+                    </Text>
+                    <View>
+                        <StarRating initialRating={review.rating} isDisabled={true}/>
+                    </View>
+                    <Text className="font-extralight text-xs">
+                        {review.review}
+                    </Text>
+                    <View className="flex flex-row justify-between">
+                        <View className="flex flex-row gap-2">
+                            <Avatar size={20} urlImg="https://i.pinimg.com/236x/4c/20/2b/4c202b6376037a5fc660a6c7b6e55661.jpg" />
+                            <Text className="text-[12px]">{review.userData?.nome || "Perfil"} {review.userData?.sobrenome || ""}</Text>
+                        </View>
+                        <View className="flex flex-row gap-4 justify-end">
+                            <HeartIcon isFavorited={isFavorited} onToggleFavorite={toggleFavorite} size={20} />
+                            <Icon size={20} name="comment-text-multiple-outline"></Icon>
+                            <Icon size={20} name="share-variant-outline"></Icon>
                         </View>
                     </View>
                 </View>
-                <Text className="font-light text-sm">
-                    NOSTALGIA RENOVADAAAAAAA
-                </Text>
-                <View>
-                    <StarRating isDisabled={true} initialRating={3} />
-                </View>
-                <Text className="font-extralight text-xs">
-                    Taylor revive 1989 com vocais melhores e novas faixas, deixando tudo ainda mais icônico e moderno. TAYMOTHER!!
-                </Text>
-                <View className="flex flex-row justify-between">
-                    <View className="flex flex-row gap-2">
-                        <Avatar size={20} urlImg="https://i.pinimg.com/236x/4c/20/2b/4c202b6376037a5fc660a6c7b6e55661.jpg" />
-                        <Text className="text-[12px]">Sabrina C.</Text>
-                    </View>
-                    <View className="flex flex-row gap-4 justify-end">
-                        <HeartIcon isFavorited={isFavorited} onToggleFavorite={toggleFavorite} size={20} />
-                        <Icon size={20} name="comment-text-multiple-outline"></Icon>
-                        <Icon size={20} name="share-variant-outline"></Icon>
-                    </View>
-                </View>
-            </View>
+            ))}
             </View>
         </ScrollView>
     );

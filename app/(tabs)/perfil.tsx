@@ -13,7 +13,7 @@ import { useAuth } from "../contexts/auth/AuthProvider";
 import { getReviewsUsuario } from "../services/reviewService";
 import { Review } from "../interfaces/review";
 import { getAlbumReview } from "../API/reviewAPI";
-import { ReviewComAlbum } from "../interfaces/reviewComAlbum";
+import { ReviewComAlbum } from "../interfaces/reviewCompleta";
 
 export default function Perfil() {
   const { userData } = useAuth();
@@ -113,7 +113,7 @@ export default function Perfil() {
                 <Image
                   width={70}
                   height={75}
-                  source={{ uri: review.albumData?.cover_medium || "fallback-image-url" }} // Fallback caso não tenha imagem
+                  source={{ uri: review.albumData?.cover_medium || "fallback-image-url" }}
                   className="rounded-lg"
                 />
                 <View className="ml-4 flex-col w-[69%]">
