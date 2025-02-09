@@ -11,15 +11,16 @@ export default function CreateAccount() {
   const [sobrenome, setSobrenome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [username, setUsername] = useState('');
   const router = useRouter();
 
   async function createUser() {
-    if (!email || !senha || !nome || !sobrenome ) {
+    if (!email || !senha || !nome || !sobrenome || !username ) {
       console.log('Erro', 'Todos os campos são obrigatórios!');
       return;
     }
 
-    const { user, error } = await signUp({nome:nome, sobrenome:sobrenome, email:email, password:senha});
+    const { user, error } = await signUp({nome:nome, sobrenome:sobrenome, email:email, password:senha, username: username});
 
     if (error) {
       console.log('Erro', error);
@@ -31,7 +32,7 @@ export default function CreateAccount() {
   }
 
   return (
-    <View className="flex-1 items-center gap-4 bg-white">
+    <View className="flex-1 items-center gap-2 bg-white">
       <Image
         className="py-4 mt-5"
         source={require("@/assets/images/loginImage.png")}
@@ -42,7 +43,7 @@ export default function CreateAccount() {
           <Text className="text-sm font-semibold mb-1">Nome</Text>
           <Input
             placeholder="Luana"
-            classname="py-1 px-3 rounded-lg w-full h-10 border"
+            classname="py-1 px-3 rounded-lg w-full border"
             onChangeText={setNome}
           />
         </View>
@@ -50,11 +51,19 @@ export default function CreateAccount() {
           <Text className="text-sm font-semibold mb-1">Sobrenome</Text>
           <Input
             placeholder="Do Rei"
-            classname="py-1 px-3 rounded-lg w-full h-10 border"
+            classname="py-1 px-3 rounded-lg w-full border"
             onChangeText={setSobrenome}          
           />
         </View>
       </View>
+      <View className="w-[80%]">
+          <Text className="text-sm font-semibold mb-1">Nome de usuário</Text>
+          <Input
+            placeholder="Nome que será exibido no seu perfil"
+            classname="py-1 px-3 rounded-lg w-full border"
+            onChangeText={setUsername}
+          />
+        </View> 
       <View className="w-[80%]">
         <Text className="text-sm font-semibold mb-1">Email</Text>
         <Input

@@ -27,10 +27,15 @@ export default function HomeScreen(){
                     sobrenome: userStorage.sobrenome,
                     email: userStorage.email,
                     password: userStorage.password,
+                    username: userStorage.username,
+                    bio: userStorage.bio
                 });
                 router.push('/initialScreen');
             }
+        }else{
+            setUserData(null);
         }
+        setIsLoading(false);
     }
 
     if (isLoading) {

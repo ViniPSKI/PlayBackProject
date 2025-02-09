@@ -1,6 +1,7 @@
 import { ref, push, query, orderByChild, equalTo, get, limitToLast  } from 'firebase/database';
 import { database } from '../../firebase';
 import { Review } from '../interfaces/review';
+import { where } from 'firebase/firestore';
 
 export async function saveReview(reviewData: {
   albumId: string;
@@ -57,6 +58,30 @@ export async function getReviewsAlbum(idAlbum: number) {
         const dateB = new Date(b.createdAt).getTime();
         return dateB - dateA;
       });
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.error("Erro ao buscar reviews:", error);
+    throw error;
+  }
+}   
+
+export async function getReviewsUsuarioIsFavorited(idUsuario: string) {
+  try {
+    const reviewsRef = ref(database, "/reviews");
+    const userReviewsQuery = query(reviewsRef, orderByChild("idUsuario"), equalTo(idUsuario));
+    const snapshot = await get(userReviewsQuery);
+
+    if (snapshot.exists()) {
+      const filteredReviews = Object.entries(snapshot.val()) 
+        .filter(([_, review]: [string, any]) => review.isFavorited === true)
+        .map(([key, value]) => ({
+          id: key,
+          ...(value as Review),
+        }));
+    
+      return filteredReviews;
     } else {
       return [];
     }
