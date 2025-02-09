@@ -1,6 +1,6 @@
 import { Review } from "./review";
 
-export interface ReviewComAlbum extends Review {
+export interface ReviewCompleta extends Review {
     albumData?: {
       cover_medium: string;
       title: string;

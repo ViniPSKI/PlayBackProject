@@ -13,12 +13,13 @@ import { router, useLocalSearchParams } from "expo-router";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Review } from "../interfaces/review";
 import { getReviewsAlbum } from "../services/reviewService";
+import { ReviewCompleta } from "../interfaces/reviewCompleta";
+import { getUser } from "../services/firebaseService";
 
 export default function InitialScreen() {
   const userLogado = "Eduarda";
 
   const album = albunsNovos[0];
-  //const reviews = Reviews;
   const usuarios = Usuarios[0];
 
   const { albumParametro } = useLocalSearchParams();
@@ -66,13 +67,18 @@ export default function InitialScreen() {
   }
 
 
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState<ReviewCompleta[]>([]);
 
   const loadReviews = async () => {
       if (albumParm?.id) {
             try {
                 const reviews: Review[] = await getReviewsAlbum(albumParm.id);
-                setReviews(reviews);
+                const reviewPromises = reviews.map(async (review) => {
+                    const userData = await getUser(review.idUsuario);
+                    return { ...review, userData };
+                });
+                const reviewsComUser = await Promise.all(reviewPromises);
+                setReviews(reviewsComUser);
             } catch (error) {
                 console.error("Erro ao carregar reviews:", error);
             }
@@ -167,13 +173,13 @@ export default function InitialScreen() {
             <View className="mx-16 mt-6">
                 <Text className="font-bold text-[20px] pb-2">Reviews</Text>
                 {reviews.map((a, key) => (
-                    <View key={a.title} className="bg-extra-light-gray rounded-2xl p-4 gap-2 mb-10 w-[100%]">
+                    <View key={key} className="bg-extra-light-gray rounded-2xl p-4 gap-2 mb-10 w-[100%]">
                         <Text className="text-[16px]">{a.title}</Text>
                         <StarRating initialRating={a.rating} isDisabled={true}/>
                         <Text className="text-[15px] color-gray">{a.review}</Text>
                         <View className="flex-row justify-around items-center mt-3">
                             <Avatar urlImg={usuarios.imgPerfil} size={20}/>
-                            <Text className="text-[12px] pl-2 ml-3 w-[50%]">{usuarios.nome}</Text>
+                            <Text className="text-[12px] pl-2 ml-3 w-[50%]">{a.userData?.nome || "Perfil"} {a.userData?.sobrenome || ""}</Text>
                             <View className="w-[50%] flex-row justify-around items-center">
                                 <HeartIcon isFavorited={true} size={22} onToggleFavorite={()=>0}/>
                                 <Icon name="message-reply-text-outline" size={22} color="gray"/>

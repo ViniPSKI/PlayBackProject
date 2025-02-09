@@ -10,7 +10,7 @@ import Button from "../components/Button";
 import UsePeriodOfDay from "../hooks/usePeriodOfDay";
 import StarRating from "../components/StarRating";
 import { useAuth } from "../contexts/auth/AuthProvider";
-import { ReviewComAlbum } from "../interfaces/reviewCompleta";
+import { ReviewCompleta } from "../interfaces/reviewCompleta";
 import { Review } from "../interfaces/review";
 import { getLastReviews } from "../services/reviewService";
 import { getAlbumReview } from "../API/reviewAPI";
@@ -43,7 +43,7 @@ export default function InitialScreen(){
         setIsFavorited(prev => !prev);
     };
 
-    const [reviews, setReviews] = useState<ReviewComAlbum[]>([]);
+    const [reviews, setReviews] = useState<ReviewCompleta[]>([]);
 
     const loadReviews = async () => {
         if (userData?.uid) {

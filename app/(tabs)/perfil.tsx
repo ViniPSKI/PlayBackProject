@@ -13,7 +13,7 @@ import { useAuth } from "../contexts/auth/AuthProvider";
 import { getReviewsUsuario } from "../services/reviewService";
 import { Review } from "../interfaces/review";
 import { getAlbumReview } from "../API/reviewAPI";
-import { ReviewComAlbum } from "../interfaces/reviewCompleta";
+import { ReviewCompleta } from "../interfaces/reviewCompleta";
 
 export default function Perfil() {
   const { userData } = useAuth();
@@ -21,7 +21,7 @@ export default function Perfil() {
   const albun = albuns; // albuns marcados como favorito
   const usuario = Usuarios[1]; // dados do usuario que ainda tem que buscar
 
-  const [reviews, setReviews] = useState<ReviewComAlbum[]>([]);
+  const [reviews, setReviews] = useState<ReviewCompleta[]>([]);
 
   const loadReviews = async () => {
     if (userData?.uid) {
