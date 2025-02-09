@@ -13,6 +13,7 @@ export default function RootLayout() {
           <Stack.Screen name="onboardingThree" options={{ headerShown: false }}/>
           <Stack.Screen name="homeScreen"  options={{ headerShown: false }} />
           <Stack.Screen name="login" options={{ headerShown: false}} />
+          <Stack.Screen name="editAccount" options={{ headerShown: false}} />
           <Stack.Screen name="accountCreationSelectScreen" options={{ headerShown: false}} />
           <Stack.Screen name="createAccount" options={{ headerShown: false}} />
           <Stack.Screen name="(tabs)/initialScreen" options={{ headerShown: false}} />
