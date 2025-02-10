@@ -9,6 +9,7 @@ export interface ReviewCompleta extends Review {
       };
     };
     userData?: {
+      id?: string,
       nome: string;
       sobrenome: string;
     };

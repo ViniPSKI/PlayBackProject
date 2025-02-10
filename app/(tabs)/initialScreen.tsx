@@ -1,6 +1,6 @@
 import { Image, ScrollView, Text, View } from "react-native";
 import Input from "../components/Input";
-import { albuns, albunsNovos } from "../moks/albums";
+import { albunsNovos } from "../moks/albums";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HeartIcon from "../components/HeartIcon";
 import { useEffect, useState } from "react";
@@ -44,6 +44,20 @@ export default function InitialScreen(){
     };
 
     const [reviews, setReviews] = useState<ReviewCompleta[]>([]);
+
+    const clickAlbum = (album: Album) => {
+        router.push({
+            pathname: "/components/album",
+            params: { albumParametro: JSON.stringify(album) },
+          });
+    };
+
+    const clickUser = (uuid: string) => {
+        router.push({
+            pathname: "/followerUser",
+            params: { idUsuario: JSON.stringify(uuid) },
+          });
+    };
 
     const loadReviews = async () => {
         if (userData?.uid) {
@@ -97,7 +111,7 @@ export default function InitialScreen(){
             </View>
             <View className="bg-light-gray rounded-lg p-3 flex flex-row justify-around">
                 {albumsTrending.map((album) => (
-                    <View onTouchEnd={()=> router.push("/components/album")} key={album.id} className="max-w-[25%] flex items-center justify-center">
+                    <View onTouchEnd={()=> clickAlbum(album)} key={album.id} className="max-w-[25%] flex items-center justify-center">
                     <Image
                         width={60}
                         height={60}
@@ -133,7 +147,7 @@ export default function InitialScreen(){
                         {review.review}
                     </Text>
                     <View className="flex flex-row justify-between">
-                        <View className="flex flex-row gap-2">
+                        <View onTouchEnd={() => clickUser(review.idUsuario)} className="flex flex-row gap-2">
                             <Avatar size={20} urlImg="https://i.pinimg.com/236x/4c/20/2b/4c202b6376037a5fc660a6c7b6e55661.jpg" />
                             <Text className="text-[12px]">{review.userData?.nome || "Perfil"} {review.userData?.sobrenome || ""}</Text>
                         </View>

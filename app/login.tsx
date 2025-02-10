@@ -2,7 +2,7 @@ import { View, Text, Image, Alert } from "react-native";
 import Button from "./components/Button";
 import Input from "./components/Input";
 import { Link, router } from 'expo-router';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { singIn, getUser, signOut } from './services/firebaseService';
 import { useAuth } from "./contexts/auth/AuthProvider";
 import  AsyncStorage  from "@react-native-async-storage/async-storage";
@@ -18,12 +18,6 @@ export default function LoginScreen(){
         await AsyncStorage.setItem('user', uid);
     }
 
-    async function clearUserStorage() {
-        await signOut();
-        AsyncStorage.clear();
-        setUser('');
-    }
-
     async function login() {
         const userId = await singIn(email, password) as string;
         const user = await getUser(userId);
@@ -35,7 +29,9 @@ export default function LoginScreen(){
                 email: user.email,
                 password: user.password,
                 username: user.username,
-                bio: user.bio
+                bio: user.bio,
+                fallowers: user.fallowers,
+                fallowing: user.fallowing 
             });
             await saveUserStorage(userId);
             router.push('/initialScreen');

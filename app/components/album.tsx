@@ -1,6 +1,5 @@
 import { Image, ScrollView, Text, View, TouchableOpacity } from "react-native";
 import { albunsNovos } from "../moks/albums";
-import { Reviews } from "../moks/reviews";
 import { Usuarios } from "../moks/usuarios"
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from "../components/Header";
@@ -17,7 +16,6 @@ import { ReviewCompleta } from "../interfaces/reviewCompleta";
 import { getUser } from "../services/firebaseService";
 
 export default function InitialScreen() {
-  const userLogado = "Eduarda";
 
   const album = albunsNovos[0];
   const usuarios = Usuarios[0];
