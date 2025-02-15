@@ -1,22 +1,25 @@
 import { Image, ScrollView, Text, View } from "react-native";
-import { Usuarios } from "../moks/usuarios";
+import { Usuarios } from "./moks/usuarios";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Header from "../components/Header";
-import Button from "../components/Button";
+import Header from "./components/Header";
+import Button from "./components/Button";
 import React, { useState, useEffect } from 'react';
-import StarRating from "../components/StarRating";
-import Avatar from "../components/Avatar";
-import HeartIcon from "../components/HeartIcon";
-import { router } from "expo-router";
-import { useAuth } from "../contexts/auth/AuthProvider";
-import { getReviewsUsuario, getReviewsUsuarioIsFavorited } from "../services/reviewService";
-import { Review } from "../interfaces/review";
-import { getAlbumReview } from "../API/reviewAPI";
-import { ReviewCompleta } from "../interfaces/reviewCompleta";
-import { signOut } from "firebase/auth";
+import StarRating from "./components/StarRating";
+import Avatar from "./components/Avatar";
+import HeartIcon from "./components/HeartIcon";
+import { router, useLocalSearchParams } from "expo-router";
+import { useAuth } from "./contexts/auth/AuthProvider";
+import { getReviewsUsuario, getReviewsUsuarioIsFavorited } from "./services/reviewService";
+import { Review } from "./interfaces/review";
+import { getAlbumReview } from "./API/reviewAPI";
+import { ReviewCompleta } from "./interfaces/reviewCompleta";
+import { getUser, singIn, updateUser } from "./services/firebaseService";
+import { User } from "./interfaces/user";
 
-export default function Perfil() {
-  const { userData } = useAuth();
+export default function FallowerUser() {
+  const { userData, setUserData } = useAuth();
+  
+  const [userFallow, setUserFallow] = useState<User>();
 
   const usuario = Usuarios[1];
 
@@ -24,21 +27,21 @@ export default function Perfil() {
   const [albumFavorited, setAlbumFavorited] = useState<ReviewCompleta[]>([]);
   const [totalReviews, setTotalReviews] = useState(0);
 
-  async function unloadUser(){
-    await signOut;
-    router.navigate("/homeScreen")
-
-  }
+  const { idUsuario } = useLocalSearchParams();
+  
+  const idUserFallow = idUsuario ? JSON.parse(idUsuario as string) : null;
 
   const loadReviews = async () => {
     if (userData?.uid) {
       try {
-        const userReviews: Review[] = await getReviewsUsuario(userData.uid);
+        const userReviews: Review[] = await getReviewsUsuario(idUserFallow);
         const albumPromises = userReviews.map(async (review) => {
           const albumData = await getAlbumReview(review.albumId);
           return { ...review, albumData };
         });
         const reviewsComAlbums = await Promise.all(albumPromises);
+
+        setTotalReviews(reviewsComAlbums.length);
 
         const sortedReviews = reviewsComAlbums.sort((a, b) => {
           const dateA = new Date(a.createdAt); 
@@ -52,18 +55,40 @@ export default function Perfil() {
       }
     }
   };
+  
+  useEffect(() => {
+        carregarUser();
+        loadReviews();
+        loadReviewsFavorited();
+    }, []);
+
+  async function carregarUser() {
+    const user = await getUser(idUserFallow);
+    if(user){
+        setUserFallow({
+            uid: idUserFallow,
+            nome: user.nome,
+            sobrenome: user.sobrenome,
+            email: user.email,
+            password: user.password,
+            username: user.username,
+            bio: user.bio,
+            fallowers: user.fallowers,
+            fallowing: user.fallowing
+            
+        });
+    }
+  }
 
   const loadReviewsFavorited = async () => {
     if (userData?.uid) {
       try {
-        const albunsFavorited: Review[] = await getReviewsUsuarioIsFavorited(userData.uid);
+        const albunsFavorited: Review[] = await getReviewsUsuarioIsFavorited(idUserFallow);
         const albumPromises = albunsFavorited.map(async (review) => {
           const albumData = await getAlbumReview(review.albumId);
           return { ...review, albumData };
         });
         const reviewsComAlbums = await Promise.all(albumPromises);
-
-        setTotalReviews(reviewsComAlbums.length);
 
         const sortedReviews = reviewsComAlbums.sort((a, b) => {
           const dateA = new Date(a.createdAt); 
@@ -78,59 +103,54 @@ export default function Perfil() {
     }
   };
 
-  useEffect(() => {
-    loadReviews();
-    loadReviewsFavorited();
-  }, [userData]);
+  async function seguirPerfil() {
+    await updateUser({fallowing: ((userData?.fallowing ? userData?.fallowing : 0) + 1)}, userData?.uid);
+    await updateUser({fallowers: ((userFallow?.fallowers ? userFallow?.fallowers : 0) + 1)}, idUserFallow);
+  }
 
   return (
     <ScrollView>
       <View className="flex bg-white">
         <View className="flex gap-3 rounded-b-[50px] bg-extra-light-gray pb-10">
           <Header 
-            title={userData?.username ? "@"+userData?.username : "@teste"} 
+            title={userData?.username ? "@"+userFallow?.username : "@teste"} 
             onBackPress={() => router.back()}
           />
           <View className="flex-row gap-1 justify-center items-center mt-5">
             <Avatar urlImg={usuario.imgPerfil} size={75}/>
             <View className="ml-7 flex-col justify-center items-center w-[20%]">
               <Text className="text-[20px] font-bold">{totalReviews}</Text>
-              <Text className="text-[14px]">Avaliações</Text>
+              <Text className="text-[14px]">avaliações</Text>
             </View>
             <View className="flex-col justify-center items-center w-[20%]">
-              <Text className="text-[20px] font-bold">{userData?.fallowers ? userData?.fallowers : 0}</Text>
-              <Text className="text-[14px]">Seguidores</Text>
+              <Text className="text-[20px] font-bold">{userFallow?.fallowers ? userFallow?.fallowers : 0}</Text>
+              <Text className="text-[14px]">seguidores</Text>
             </View>
             <View className="flex-col justify-center items-center w-[20%]">
-              <Text className="text-[20px] font-bold">{userData?.fallowing ? userData?.fallowing : 0}</Text>
-              <Text className="text-[14px]">Seguindo</Text>
+              <Text className="text-[20px] font-bold">{userFallow?.fallowing ? userFallow?.fallowing : 0}</Text>
+              <Text className="text-[14px]">seguindo</Text>
             </View>
           </View>
 
           <View className="mx-[62px] mt-2">
-            <Text className="text-[20px]">{userData?.nome}</Text>
+            <Text className="text-[20px]">{userFallow?.nome}</Text>
             <Text className="mt-1 text-[14px] color-gray">
-              {userData?.bio ? userData?.bio : "Insira algo sobre você para que as pessoas possam saber mais (clique em editar)" }
+              {userFallow?.bio ? userFallow?.bio : "Bem vindo ao meu perfil :)" }
             </Text>
           </View>
 
           <View className="flex-row justify-center items-center space-x-4 gap-3 mt-5 mb-5">
             <Button 
-              textButton="Editar perfil" classname="w-[65%] bg-blue p-2 mr-3" 
+              textButton="Seguir perfil" classname="w-[65%] bg-blue p-2 mr-3" 
               textStyle="text-white text-[20px]" 
-              onPress={()=>router.navigate("/editAccount")}
-            />
-            <Button  
-              classname="w-[10%] bg-blue h-[40px]" 
-              icon="door-closed" iconSize={22} iconColor="white"
-              onPress={unloadUser}
+              onPress={()=>seguirPerfil()}
             />
           </View>
 
         </View>
 
         <View className="mx-16 mt-6">
-          <Text className="font-bold text-[21px]">Meus <HeartIcon isFavorited={true} size={22} onToggleFavorite={()=>0}/> Favoritos</Text>
+          <Text className="font-bold text-[21px]">Albuns favoritos de {userFallow?.nome} <HeartIcon isFavorited={true} size={22} onToggleFavorite={()=>0}/></Text>
           <View className="bg-extra-light-gray rounded-3xl pt-7 pb-5 flex flex-row justify-around px-10">
             {albumFavorited.map((a, key) => (
               <View onTouchEnd={() => router.push("/components/album")} key={key} className="w-[23%] items-center justify-center">

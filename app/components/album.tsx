@@ -1,6 +1,5 @@
 import { Image, ScrollView, Text, View, TouchableOpacity } from "react-native";
 import { albunsNovos } from "../moks/albums";
-import { Reviews } from "../moks/reviews";
 import { Usuarios } from "../moks/usuarios"
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from "../components/Header";

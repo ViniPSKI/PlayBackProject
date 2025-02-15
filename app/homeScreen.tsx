@@ -28,7 +28,9 @@ export default function HomeScreen(){
                     email: userStorage.email,
                     password: userStorage.password,
                     username: userStorage.username,
-                    bio: userStorage.bio
+                    bio: userStorage.bio,
+                    fallowers: userStorage.fallowers,
+                    fallowing: userStorage.fallowing 
                 });
                 router.push('/initialScreen');
             }
