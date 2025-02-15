@@ -15,6 +15,7 @@ import { Review } from "../interfaces/review";
 import { getLastReviews } from "../services/reviewService";
 import { getAlbumReview } from "../API/reviewAPI";
 import { getUser } from "../services/firebaseService";
+import { useRouter } from "expo-router";
 
 export default function InitialScreen(){
     const albunsNew: Album_Teste[] = albunsNovos;
@@ -25,7 +26,7 @@ export default function InitialScreen(){
         try {
             const response = await fetch("https://api.deezer.com/chart/0/albums");
             const data = await response.json();
-            setAlbumsTrending(data.data.slice(0, 3));
+            setAlbumsTrending(data.data);
         } catch (error) {
             console.error("Erro ao buscar álbuns em alta:", error);
         }
@@ -73,6 +74,18 @@ export default function InitialScreen(){
         loadReviews();
     }, []);
 
+    // validacoes para levar para a tela de pesquisa:
+    const [textoPesquisa, setTextoPesquisa] = useState("");
+    const router = useRouter();
+
+    const handleSearch = (text: string) => {
+        setTextoPesquisa(text);
+        router.push({
+        pathname: "/(tabs)/SearchScreen",
+        params: { query: text },
+        });
+    };
+
     return(
         <ScrollView >
             <View className="flex gap-3 m-4 mt-10">
@@ -80,7 +93,14 @@ export default function InitialScreen(){
                 <Text className="text-2xl">{messageWelcome}, {userData?.nome}!</Text>
                 <Button className="bg-blue rounded-full w-max p-2" iconColor="white" icon="bell-outline" />
             </View>
-            <Input placeholder="O que você está ouvindo?" classname="bg-light-gray w-full p-1 border-light-gray"></Input>
+            <Input
+                icon="magnify"
+                placeholder="Procure..."
+                classname="bg-light-gray w-full p-1 border-light-gray mb-8"
+                value={textoPesquisa}
+                onChangeText={setTextoPesquisa}
+                onSubmitEditing={() => handleSearch(textoPesquisa)} 
+            />
             <View className="bg-light-gray rounded-lg p-3 gap-2">
                 <View className="flex flex-row gap-4">
                     <Image width={40} height={40} source={{uri:albunsNew[0].imgLink}} className="rounded-md" />
@@ -93,10 +113,20 @@ export default function InitialScreen(){
             </View>
             <View className="flex flex-row justify-between">
                 <Text>Em alta</Text>
-                <Text className="text-xs font-extralight justify-end">Ver todos</Text>
+                <Text
+                    className="text-xs font-extralight justify-end"
+                    onPress={() => {
+                        router.push({
+                        pathname: "/(tabs)/SearchScreen",
+                        params: { trendingAlbums: JSON.stringify(albumsTrending) },
+                        });
+                    }}
+                    >
+                    Ver todos
+                </Text>
             </View>
             <View className="bg-light-gray rounded-lg p-3 flex flex-row justify-around">
-                {albumsTrending.map((album) => (
+                {albumsTrending.slice(0, 3).map((album) => (
                     <View onTouchEnd={()=> router.push("/components/album")} key={album.id} className="max-w-[25%] flex items-center justify-center">
                     <Image
                         width={60}
