@@ -142,7 +142,7 @@ export default function InitialScreen(){
                 </Text>
             </View>
             <View className="bg-light-gray rounded-lg p-3 flex flex-row justify-around">
-                {albumsTrending..slice(0, 3)map((album) => (
+                {albumsTrending.slice(0, 3).map((album) => (
                     <View onTouchEnd={()=> clickAlbum(album)} key={album.id} className="max-w-[25%] flex items-center justify-center">
                     <Image
                         width={60}
