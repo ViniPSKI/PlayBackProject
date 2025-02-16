@@ -2,11 +2,10 @@ import { Stack } from "expo-router";
 import "../global.css";
 import { AuthProvider } from "./contexts/auth/AuthProvider";
 
-
 export default function RootLayout() {
   return (
     <AuthProvider>
-      < Stack>
+      <Stack>
           <Stack.Screen name="onboardingOne" options={{ headerShown: false }}/>
           <Stack.Screen name="index" options={{ headerShown: false }}/>
           <Stack.Screen name="onboardingTwo" options={{ headerShown: false }}/>
@@ -22,6 +21,8 @@ export default function RootLayout() {
           <Stack.Screen name="components/reviewScreen" options={{ headerShown: false}} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)/perfil" options={{ headerShown: false}} />
+          <Stack.Screen name="fallowersList" options={{ headerShown: true}} />
+          <Stack.Screen name="fallowingList" options={{ headerShown: true}} />
         </Stack>
     </AuthProvider>
   );

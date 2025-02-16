@@ -30,8 +30,8 @@ export default function LoginScreen(){
                 password: user.password,
                 username: user.username,
                 bio: user.bio,
-                fallowers: user.fallowers,
-                fallowing: user.fallowing 
+                followers: user.followers,
+                following: user.following 
             });
             await saveUserStorage(userId);
             router.push('/initialScreen');

@@ -53,10 +53,12 @@ export default function InitialScreen(){
     };
 
     const clickUser = (uuid: string) => {
-        router.push({
-            pathname: "/followerUser",
-            params: { idUsuario: JSON.stringify(uuid) },
-          });
+        if(uuid != userData?.uid){
+            router.push({
+                pathname: "/followerUser",
+                params: { idUsuario: JSON.stringify(uuid) },
+            });
+        }
     };
 
     const loadReviews = async () => {

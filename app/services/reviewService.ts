@@ -1,7 +1,6 @@
 import { ref, push, query, orderByChild, equalTo, get, limitToLast  } from 'firebase/database';
 import { database } from '../../firebase';
 import { Review } from '../interfaces/review';
-import { where } from 'firebase/firestore';
 
 export async function saveReview(reviewData: {
   albumId: string;
