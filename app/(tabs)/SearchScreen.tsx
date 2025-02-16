@@ -5,15 +5,33 @@ import Input from "../components/Input";
 import { useState } from "react";
 import SearchCardsAPI from "../components/SearchCardsAPI";
 import { router } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
+import { useEffect } from "react";
 
 export default function SearchScreen(){
     const [textoPesquisa, setTextoPesquisa] = useState("");
     const [retPesquisa, setRetPesquisa] = useState<Album[]>([]);
+    const { trendingAlbums } = useLocalSearchParams(); 
+    const { query } = useLocalSearchParams();
     const topicos = Topicos;
 
     const EmAlta = topicos.slice(0, 2);
     const TopListas = topicos.slice(2, 6);
     const ParaVoce = topicos.slice(6, 8);
+
+    useEffect(() => {
+        if (query) {
+            setTextoPesquisa(query as string);
+            searchAlbums(query as string);
+        }
+    }, [query]);
+
+    useEffect(() => {
+        if (trendingAlbums) {
+            const parsedAlbums = JSON.parse(trendingAlbums as string);
+            setRetPesquisa(parsedAlbums);
+        }
+    }, [trendingAlbums]);
 
     const searchAlbums = async (texto: string) => {
         try {

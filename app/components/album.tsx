@@ -14,8 +14,10 @@ import { Review } from "../interfaces/review";
 import { getReviewsAlbum } from "../services/reviewService";
 import { ReviewCompleta } from "../interfaces/reviewCompleta";
 import { getUser } from "../services/firebaseService";
+import { useAuth } from "../contexts/auth/AuthProvider";
 
 export default function InitialScreen() {
+  const { userData } = useAuth();
 
   const album = albunsNovos[0];
   const usuarios = Usuarios[0];
@@ -89,6 +91,15 @@ export default function InitialScreen() {
         }
     }, [albumParm]);
 
+    const totalEstrelas = reviews.reduce((total, review) => total + review.rating, 0);
+
+    var totalEstrelasUsuario = null;
+    if (userData?.uid) {
+        totalEstrelasUsuario = reviews
+            .filter((review) => review.idUsuario === userData.uid)
+            .reduce((total, review) => total + review.rating, 0);
+    }
+
   return (
     <ScrollView>
         <View className="flex bg-white">
@@ -133,14 +144,14 @@ export default function InitialScreen() {
                     <View className="flex-col justify-center items-center mx-20">
                         <View className="flex-row">
                             <Icon name="star" size={20} color="gold" className="mr-2" /> 
-                            <Text className="text-[16px] font-bold">{album.totalEstrelas / album.avaliacoes}/5</Text>
+                            <Text className="text-[16px] font-bold">{totalEstrelas / reviews.length}/5</Text>
                         </View>
                         <Text className="text-[14px]">nota média</Text>
                     </View>
                     <View className="flex-col justify-center items-center">
                         <View className="flex-row">
                         <Icon name="star" size={20} color="gold" className="mr-2" /> 
-                            <Text className="text-[16px] font-bold">-/5</Text>
+                            <Text className="text-[16px] font-bold">{totalEstrelasUsuario ? `${totalEstrelasUsuario}` : "-"}/5</Text>
                         </View>
                         <Text className="text-[14px]">sua nota</Text>
                     </View>
@@ -179,7 +190,7 @@ export default function InitialScreen() {
                             <Avatar urlImg={usuarios.imgPerfil} size={20}/>
                             <Text className="text-[12px] pl-2 ml-3 w-[50%]">{a.userData?.nome || "Perfil"} {a.userData?.sobrenome || ""}</Text>
                             <View className="w-[50%] flex-row justify-around items-center">
-                                <HeartIcon isFavorited={true} size={22} onToggleFavorite={()=>0}/>
+                                <HeartIcon isFavorited={a.isFavorited} size={22} onToggleFavorite={()=>0}/>
                                 <Icon name="message-reply-text-outline" size={22} color="gray"/>
                                 <Icon name="share-variant-outline" size={22} color="gray" className="ml-[12px]" />
                             </View>

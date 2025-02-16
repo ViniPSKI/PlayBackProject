@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { TextInput, View } from "react-native";
+import { TextInput, View, TextInputProps } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-interface InputProps{
+interface InputProps extends TextInputProps {
     placeholder?: string;
     password?:boolean;
     classname?:string;
@@ -11,16 +11,17 @@ interface InputProps{
     styleTextInput?:string;
     value?: string;
     onChangeText?: (text: string) => void;
+    onSubmitEditing?: () => void;
 }
 
-function Input({ icon, password, multiline, ...props }: InputProps) {
+function Input({ icon, password, multiline, onSubmitEditing, ...props }: InputProps) {
     const defaultstyle = "border-gray rounded-xl flex flex-row items-center";
     const [secure, setSecure] = useState(password);
-    
+
     return (
         <View className={`${defaultstyle} ${props.classname}`}>
             {icon && (
-                <Icon 
+                <Icon
                     name={icon}
                     className="px-2"
                 />
@@ -30,14 +31,15 @@ function Input({ icon, password, multiline, ...props }: InputProps) {
                 secureTextEntry={secure}
                 placeholder={props.placeholder}
                 className={props.styleTextInput}
-                defaultValue={props.value} 
-                onChangeText={props.onChangeText} 
+                defaultValue={props.value}
+                onChangeText={props.onChangeText}
+                onSubmitEditing={onSubmitEditing} // Repassando ao TextInput
             />
             {password && 
                 <Icon
                     name={secure ? "eye" : 'eye-off-outline'}
                     size={20}
-                    color='gray' 
+                    color='gray'
                     className="absolute right-3"
                     onPress={() => setSecure(!secure)}
                 />
@@ -45,6 +47,5 @@ function Input({ icon, password, multiline, ...props }: InputProps) {
         </View>
     );
 }
-
 
 export default Input;
