@@ -15,6 +15,7 @@ import { getReviewsAlbum } from "../services/reviewService";
 import { ReviewCompleta } from "../interfaces/reviewCompleta";
 import { getUser } from "../services/firebaseService";
 import { useAuth } from "../contexts/auth/AuthProvider";
+import { Linking } from 'react-native';
 
 export default function InitialScreen() {
   const { userData } = useAuth();
@@ -36,6 +37,7 @@ export default function InitialScreen() {
     try {
       const response = await fetch(link);
       const data = await response.json();
+      console.log(data.data);
       return data.data || [];
     } catch (e) {
       console.error("Erro ao buscar tracklist:", e);
@@ -54,23 +56,23 @@ export default function InitialScreen() {
     carregarTracklist();
   }, []); 
 
-  const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
 
-  const verTodos = () => {
-    setIsExpanded(!isExpanded);
-  };
+    const verTodos = () => {
+        setIsExpanded(!isExpanded);
+    };
 
-  function minutos(segundos: number): string {
-    const minutos = Math.floor(segundos / 60);
-    const segundosResto = segundos % 60;
-    return `${String(minutos).padStart(2, '0')}:${String(segundosResto).padStart(2, '0')}`;
-  }
+    function minutos(segundos: number): string {
+        const minutos = Math.floor(segundos / 60);
+        const segundosResto = segundos % 60;
+        return `${String(minutos).padStart(2, '0')}:${String(segundosResto).padStart(2, '0')}`;
+    }
 
 
-  const [reviews, setReviews] = useState<ReviewCompleta[]>([]);
+    const [reviews, setReviews] = useState<ReviewCompleta[]>([]);
 
-  const loadReviews = async () => {
-      if (albumParm?.id) {
+    const loadReviews = async () => {
+        if (albumParm?.id) {
             try {
                 const reviews: Review[] = await getReviewsAlbum(albumParm.id);
                 const reviewPromises = reviews.map(async (review) => {
@@ -162,14 +164,14 @@ export default function InitialScreen() {
                 <Text className="font-bold text-[20px]">Tracklist</Text>
                 <View className="bg-extra-light-gray rounded-2xl px-7 pt-7 pb-3 gap-2">
                     {tracklist.slice(0, isExpanded ? tracklist.length : 4).map((a:TrackList, key: number) => (
-                        <View key={key} className="flex-row px-3 items-center">
+                        <View key={key} className="flex-row px-3 items-center" onTouchEnd={() => Linking.openURL(a.link)}>
                             <Text className="text-[16px] font-bold color-black mr-2 w-[5%]">{key + 1}</Text>
                             <View className="w-[80%] flex-row">
                                 <Text className="text-[16px] mr-1" numberOfLines={1}>{a.title}</Text>
                                 {a.explicit_lyrics ? (<MaterialIcons name="explicit" size={20} color="gray" />):(<></>)}
                             </View>
                             <Text className="color-gray text-[14px] w-[10%]" numberOfLines={1}>{minutos(a.duration)}</Text>
-                            <Icon name="play-circle" size={17} color="gray" className="mr-2 w-[10%]" />
+                            <Icon name="play-circle" size={17} color="gray" className="mr-2 w-[10%]"/>
                         </View>
                     ))}
                     

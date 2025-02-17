@@ -21,12 +21,15 @@ export default function InitialScreen(){
     const albunsNew: Album_Teste[] = albunsNovos;
 
     const [albumsTrending, setAlbumsTrending] = useState<Album[]>([]);
+    const [albumAleatorio, setAlbumAleatorio] = useState<Album>();
 
     const fetchTrendingAlbums = async () => {
         try {
             const response = await fetch("https://api.deezer.com/chart/0/albums");
             const data = await response.json();
             setAlbumsTrending(data.data);
+            const randomN = Math.floor(Math.random() * albumsTrending.length);
+            setAlbumAleatorio(data.data[randomN]);
         } catch (error) {
             console.error("Erro ao buscar álbuns em alta:", error);
         }
@@ -102,6 +105,26 @@ export default function InitialScreen(){
         });
     };
 
+    const clickAlbumReview = (review: ReviewCompleta) => {
+    
+        if (review?.albumData) {
+          const album = {
+            id: review.albumData.id,
+            title: review.albumData.title,
+            cover_medium: review.albumData.cover_medium,
+            artist: review.albumData.artist,
+            type: review.albumData.type,
+            nb_tracks: review.albumData.nb_tracks,
+            tracklist: review.albumData.tracklist
+          };
+    
+          router.push({
+              pathname: "/components/album",
+              params: { albumParametro: JSON.stringify(album) },
+            });
+        }
+    };
+
     return(
         <ScrollView >
             <View className="flex gap-3 m-4 mt-10">
@@ -118,14 +141,19 @@ export default function InitialScreen(){
                 onSubmitEditing={() => handleSearch(textoPesquisa)} 
             />
             <View className="bg-light-gray rounded-lg p-3 gap-2">
-                <View className="flex flex-row gap-4">
-                    <Image width={40} height={40} source={{uri:albunsNew[0].imgLink}} className="rounded-md" />
+                <View onTouchEnd={()=> albumAleatorio? clickAlbum(albumAleatorio): ""} className="flex flex-row gap-4">
+                    <Image width={40} height={40} source={{uri:albumAleatorio ? albumAleatorio.cover_medium:""}} className="rounded-md" />
                     <View>
-                        <Text className="font-medium text-lg">{albunsNew[0].nome}</Text>
-                        <Text className="text-sm">{albunsNew[0].autor}</Text>
+                        <Text className="font-medium text-lg">{albumAleatorio ? albumAleatorio.title: "Album"}</Text>
+                        <Text className="text-sm">{albumAleatorio ? albumAleatorio.artist.name: "Artista"}</Text>
                     </View>
                 </View>
-                <Text className="font-extralight text-center text-xs">{albunsNew[0].descricao}</Text>
+                <Text className="font-extralight text-center text-xs">
+                    {albumAleatorio ? 
+                        albumAleatorio.title + " é um álbum do artista " + 
+                        albumAleatorio.artist.name
+                    : "Descrição"}
+                </Text>
             </View>
             <View className="flex flex-row justify-between">
                 <Text>Em alta</Text>
@@ -160,7 +188,7 @@ export default function InitialScreen(){
             <Text>Timeline</Text>
             {reviews.map((review, key) => (
                 <View key={key} className="bg-light-gray rounded-md p-2 gap-1">
-                    <View className="bg-snow p-2 rounded-md">
+                    <View onTouchEnd={()=>{clickAlbumReview(review)}} className="bg-snow p-2 rounded-md">
                         <View className="flex flex-row gap-4">
                             <Image width={40} height={40} source={{ uri: review.albumData?.cover_medium || "fallback-image-url" }} className="rounded-md" />
                             <View>
@@ -184,7 +212,7 @@ export default function InitialScreen(){
                             <Text className="text-[12px]">{review.userData?.nome || "Perfil"} {review.userData?.sobrenome || ""}</Text>
                         </View>
                         <View className="flex flex-row gap-4 justify-end">
-                            <HeartIcon isFavorited={isFavorited} onToggleFavorite={toggleFavorite} size={20} />
+                            <HeartIcon isFavorited={review.isFavorited} onToggleFavorite={()=>{}} size={20} />
                             <Icon size={20} name="comment-text-multiple-outline"></Icon>
                             <Icon size={20} name="share-variant-outline"></Icon>
                         </View>

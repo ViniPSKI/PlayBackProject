@@ -22,9 +22,6 @@ export default function Perfil() {
 
   const [reviews, setReviews] = useState<ReviewCompleta[]>([]);
   const [albumFavorited, setAlbumFavorited] = useState<ReviewCompleta[]>([]);
-  const [totalReviews, setTotalReviews] = useState(0);
-  const [totalSeguidores, setTotalSeguidores]= useState(0);
-  const [totalSeguindo, setTotalSeguindo]= useState(0);
 
   async function unloadUser(){
     await signOut;
@@ -47,7 +44,7 @@ export default function Perfil() {
           return dateB.getTime() - dateA.getTime();
         });
 
-        setAlbumFavorited(sortedReviews);
+        setReviews(sortedReviews);
       } catch (error) {
         console.error("Erro ao carregar reviews:", error);
       }
@@ -64,21 +61,39 @@ export default function Perfil() {
         });
         const reviewsComAlbums = await Promise.all(albumPromises);
 
-        setTotalReviews(reviewsComAlbums.length);
-
         const sortedReviews = reviewsComAlbums.sort((a, b) => {
           const dateA = new Date(a.createdAt); 
           const dateB = new Date(b.createdAt);
           return dateB.getTime() - dateA.getTime();
         });
 
-        setReviews(sortedReviews);
+        setAlbumFavorited(sortedReviews);
       } catch (error) {
         console.error("Erro ao carregar reviews:", error);
       }
     }
   };
+  
+  const clickAlbumReview = (review: ReviewCompleta) => {
 
+    if (review?.albumData) {
+      const album = {
+        id: review.albumData.id,
+        title: review.albumData.title,
+        cover_medium: review.albumData.cover_medium,
+        artist: review.albumData.artist,
+        type: review.albumData.type,
+        nb_tracks: review.albumData.nb_tracks,
+        tracklist: review.albumData.tracklist
+      };
+
+      router.push({
+          pathname: "/components/album",
+          params: { albumParametro: JSON.stringify(album) },
+        });
+    }
+  };
+    
   function loadCabecalho(){
     setTotalSeguidores(userData?.followers ? userData?.followers.length : 0);
     setTotalSeguindo(userData?.following ? userData?.following.length : 0);
@@ -101,7 +116,7 @@ export default function Perfil() {
           <View className="flex-row gap-1 justify-center items-center mt-5">
             <Avatar urlImg={usuario.imgPerfil} size={75}/>
             <View className="ml-7 flex-col justify-center items-center w-[20%]">
-              <Text className="text-[20px] font-bold">{totalReviews}</Text>
+              <Text className="text-[20px] font-bold">{reviews.length}</Text>
               <Text className="text-[14px]">Avaliações</Text>
             </View>
             <View onTouchEnd={() => totalSeguidores > 0 ? router.push("/fallowersList") : {}} className="flex-col justify-center items-center w-[20%]">
@@ -139,8 +154,8 @@ export default function Perfil() {
         <View className="mx-16 mt-6">
           <Text className="font-bold text-[21px]">Meus <HeartIcon isFavorited={true} size={22} onToggleFavorite={()=>0}/> Favoritos</Text>
           <View className="bg-extra-light-gray rounded-3xl pt-7 pb-5 flex flex-row justify-around px-10">
-            {albumFavorited.map((a, key) => (
-              <View onTouchEnd={() => router.push("/components/album")} key={key} className="w-[23%] items-center justify-center">
+            {albumFavorited.slice(0, 3).map((a, key) => (
+              <View onTouchEnd={() => clickAlbumReview(a)} key={key} className="w-[23%] items-center justify-center">
                 <Image width={90} height={95} source={{ uri: a.albumData?.cover_medium }} className="rounded-lg" />
                 <Text className="overflow-hidden whitespace-nowrap w-[95%] text-center text-[17px]" numberOfLines={1}>{a.albumData?.title}</Text>
                 <Text className="font-extralight text-[13px]">{a.albumData?.artist.name }</Text>
@@ -153,7 +168,7 @@ export default function Perfil() {
           <Text className="font-bold text-[20px] mb-1">Últimas Reviews</Text>
           {reviews.map((review, key) => (
             <View key={key} className="gap-2 mb-10 rounded-lg">
-              <View className="bg-extra-light-gray p-3 flex-row justify-around rounded-lg items-center">
+              <View onTouchEnd={()=>{clickAlbumReview(review)}} className="bg-extra-light-gray p-3 flex-row justify-around rounded-lg items-center">
                 <Image
                   width={70}
                   height={75}
