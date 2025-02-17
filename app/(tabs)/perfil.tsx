@@ -93,6 +93,9 @@ export default function Perfil() {
         });
     }
   };
+
+  const [totalSeguidores, setTotalSeguidores]= useState(0);
+  const [totalSeguindo, setTotalSeguindo]= useState(0);
     
   function loadCabecalho(){
     setTotalSeguidores(userData?.followers ? userData?.followers.length : 0);
