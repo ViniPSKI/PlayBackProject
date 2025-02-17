@@ -6,6 +6,6 @@ export interface User{
     email: string;
     password: string;
     bio?: string;
-    fallowers?: number;
-    fallowing?: number;
+    followers?: string[];
+    following?: string[];
 }

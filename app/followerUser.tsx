@@ -13,11 +13,11 @@ import { getReviewsUsuario, getReviewsUsuarioIsFavorited } from "./services/revi
 import { Review } from "./interfaces/review";
 import { getAlbumReview } from "./API/reviewAPI";
 import { ReviewCompleta } from "./interfaces/reviewCompleta";
-import { getUser, singIn, updateUser } from "./services/firebaseService";
+import { getUser, updateUser } from "./services/firebaseService";
 import { User } from "./interfaces/user";
 
 export default function FallowerUser() {
-  const { userData, setUserData } = useAuth();
+  const { userData } = useAuth();
   
   const [userFallow, setUserFallow] = useState<User>();
 
@@ -73,8 +73,8 @@ export default function FallowerUser() {
             password: user.password,
             username: user.username,
             bio: user.bio,
-            fallowers: user.fallowers,
-            fallowing: user.fallowing
+            followers: user.fallowers,
+            following: user.fallowing
             
         });
     }
@@ -104,9 +104,25 @@ export default function FallowerUser() {
   };
 
   async function seguirPerfil() {
-    await updateUser({fallowing: ((userData?.fallowing ? userData?.fallowing : 0) + 1)}, userData?.uid);
-    await updateUser({fallowers: ((userFallow?.fallowers ? userFallow?.fallowers : 0) + 1)}, idUserFallow);
+    try {
+      const updatedFollowing = userData?.following
+        ? Array.from(new Set([...userData.following, idUserFallow]))
+        : [idUserFallow];
+      await updateUser({ following: updatedFollowing }, userData?.uid);
+
+      if (userFallow) {
+        const updatedFollowers = (userFallow.followers
+          ? Array.from(new Set([...userFallow.followers, userData?.uid]))
+          : [userData?.uid]) as string[];
+  
+        await updateUser({ followers: updatedFollowers }, idUserFallow);
+        setUserFallow((prev) => (prev ? { ...prev, followers: updatedFollowers } : prev));
+      }
+    } catch (error) {
+      console.error("Erro ao seguir o usuário:", error);
+    }
   }
+  
 
   return (
     <ScrollView>
@@ -123,11 +139,11 @@ export default function FallowerUser() {
               <Text className="text-[14px]">avaliações</Text>
             </View>
             <View className="flex-col justify-center items-center w-[20%]">
-              <Text className="text-[20px] font-bold">{userFallow?.fallowers ? userFallow?.fallowers : 0}</Text>
+              <Text className="text-[20px] font-bold">{userFallow?.followers ? userFallow?.followers.length : 0}</Text>
               <Text className="text-[14px]">seguidores</Text>
             </View>
             <View className="flex-col justify-center items-center w-[20%]">
-              <Text className="text-[20px] font-bold">{userFallow?.fallowing ? userFallow?.fallowing : 0}</Text>
+              <Text className="text-[20px] font-bold">{userFallow?.following ? userFallow?.following.length : 0}</Text>
               <Text className="text-[14px]">seguindo</Text>
             </View>
           </View>

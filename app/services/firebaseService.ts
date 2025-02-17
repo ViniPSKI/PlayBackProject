@@ -47,7 +47,6 @@ export async function getUser(id?: string) {
 export async function updateUser(newData: Partial<User>,userId?: string) {
   try {
     await update(ref(database, `users/${userId}`), newData);
-    console.log("Usuário atualizado com sucesso!");
   } catch (error) {
     console.error("Erro ao atualizar usuário:", error);
   }

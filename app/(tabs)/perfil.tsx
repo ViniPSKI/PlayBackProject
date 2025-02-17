@@ -26,7 +26,6 @@ export default function Perfil() {
   async function unloadUser(){
     await signOut;
     router.navigate("/homeScreen")
-
   }
 
   const loadReviews = async () => {
@@ -74,7 +73,7 @@ export default function Perfil() {
       }
     }
   };
-
+  
   const clickAlbumReview = (review: ReviewCompleta) => {
 
     if (review?.albumData) {
@@ -94,10 +93,16 @@ export default function Perfil() {
         });
     }
   };
+    
+  function loadCabecalho(){
+    setTotalSeguidores(userData?.followers ? userData?.followers.length : 0);
+    setTotalSeguindo(userData?.following ? userData?.following.length : 0);
+  }
 
   useEffect(() => {
     loadReviews();
     loadReviewsFavorited();
+    loadCabecalho();
   }, [userData]);
 
   return (
@@ -114,12 +119,12 @@ export default function Perfil() {
               <Text className="text-[20px] font-bold">{reviews.length}</Text>
               <Text className="text-[14px]">Avaliações</Text>
             </View>
-            <View className="flex-col justify-center items-center w-[20%]">
-              <Text className="text-[20px] font-bold">{userData?.fallowers ? userData?.fallowers : 0}</Text>
+            <View onTouchEnd={() => totalSeguidores > 0 ? router.push("/fallowersList") : {}} className="flex-col justify-center items-center w-[20%]">
+              <Text className="text-[20px] font-bold">{totalSeguidores}</Text>
               <Text className="text-[14px]">Seguidores</Text>
             </View>
-            <View className="flex-col justify-center items-center w-[20%]">
-              <Text className="text-[20px] font-bold">{userData?.fallowing ? userData?.fallowing : 0}</Text>
+            <View onTouchEnd={() => totalSeguindo > 0 ? router.push("/fallowingList") : {}} className="flex-col justify-center items-center w-[20%]">
+              <Text className="text-[20px] font-bold">{totalSeguindo}</Text>
               <Text className="text-[14px]">Seguindo</Text>
             </View>
           </View>
